@@ -1,11 +1,11 @@
 import React from 'react'
-
+import { Routes,Route } from 'react-router-dom';
 const App = () => {
   return (
 
      <div>
 
-     This is the Event Management System Project. 
+     
     </div>
   )
 }
