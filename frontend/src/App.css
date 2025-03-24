@@ -1,0 +1,196 @@
+/* Style For Our EMS */
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: rgb(240, 239, 228);
+}
+
+/*Landing Page */ 
+.landing-h1{
+    font-size: 2rem;
+    margin-left:10%;
+    font-weight: bold;
+    margin-top:15%;
+    color:rgb(57, 18, 201);
+
+}
+
+.logo-img{
+    height:70px;
+  width: 80px;
+  border-radius:none;
+  display: inline;
+  
+}
+
+.landing-h1, .logo-img{
+
+    display: inline;
+    max-width: 10%;
+    max-height:1%;
+    border-radius: 20%;
+}
+
+nav{
+    
+    display:flex ;
+    justify-content:center ;
+     align-items:center ;
+     padding: 10px;
+     margin-left: 2.5%;
+     margin-right:4%;
+     margin-top: -0.8%;
+      border-radius: 5%;
+}
+
+
+nav, Link{
+    border: #0515a1;
+    border-radius: 45%;
+    display:flex;
+    justify-content:space-around;
+    border-radius:1%;
+     background-color: rgb(199, 192, 158);
+    font-size: large;
+    color:rgb(251, 251, 252);
+    padding:12px;
+    list-style: none;
+    margin-left:28%;
+    margin-right:5%;
+    max-width: auto;
+    max-height: auto;
+}
+
+.link-li{
+    display:flex;
+    justify-content:space-around;
+    border-radius:5%;
+    padding: 4px;
+    font-size: large;
+    font-weight: normal;
+    background-color: white;
+    color:rgb(6, 19, 2);
+    font-weight: bold;
+    list-style: none;
+    background-color: rgb(244, 250, 250);
+}
+.log-form{
+    margin-left: 40%;
+    margin-top: -30%;
+    max-width: 750px;
+
+}
+ .form-div{
+    padding: 2rem;
+    background-color: #beceb3;
+    max-width: 500px;
+ }
+/*IntroCard */ 
+.Intro-Card{
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+    padding: 30px;
+    margin: 5px 30px;
+    text-align: center;
+    max-width: 300px;
+    max-height: 450px;
+    display:inline-block ;
+    justify-content: center;
+    background-color:rgb(199, 218, 205);
+    margin-top: 4% ;
+    margin-left: 7%;  
+    margin-right: 1%; 
+}
+
+.Welcome-heading{ 
+    background-color: rgb(154, 152, 235);
+    color: gold;
+    text-align: center;
+    font-weight: bold;
+    font-size:2.1rem;
+    max-width: 550px;
+    padding: 5px 2px 2px;
+    margin-left:5%;
+    margin-left: 0%;
+    border-radius: 1%;
+     
+}
+
+.role1{
+    font-size: large;
+    font-weight:bold;
+    color: rgb(181, 219, 86);
+}
+
+.role2{
+    font-size: large;
+    font-weight:bold;
+    color: rgb(152, 167, 235);
+}
+
+/* Events Page */ 
+
+.View1{
+    font-weight: bold;
+    display: flex;
+    justify-content: space-around;
+    color: #f6f6f8;
+    background-color: rgb(12, 64, 233);
+    margin-left:5%;
+    border-radius: 5%;
+     font-size: 2rem;
+     padding: 5px;
+     margin-top: 2%;
+}
+.View-Para{
+    text-align: center;
+    font-size: large;
+    color: blue;
+    margin-top: 12px;
+
+}
+.View2{
+    display: flex;
+    justify-content: space-around;
+    color: #030513;
+    background-color: rgb(184, 167, 162);
+    margin-left:5%;
+    border-radius: 5%;
+     font-size: 2rem;
+     padding: 5px;
+     margin-top: 2%;
+     font-weight: bold;
+}
+
+/* INPUT ICON */ 
+.ICON{
+ 
+    color:rgb(13, 194, 58);
+    margin-left:10px;
+
+}
+
+.input{
+     width: 100%;
+     padding-left: 2,5rem;
+     padding-right: 0.75rem;
+     padding-top: 0.5rem;
+     padding-bottom: 0.5rem;
+     background-color: rgba(197, 187, 187, 0.5);
+     border-radius: 0.5rem;
+     border:1px solid #353333;
+     transition-duration: 200ms;
+     :focus{
+        border: 1px solid #34c759;
+        box-shadow: 0 0 0 2px #34c759;
+     }
+     text-align: center;
+
+}
+.input-div{
+    position: relative;
+    margin-bottom: 1.5rem;
+}

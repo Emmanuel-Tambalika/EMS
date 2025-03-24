@@ -4,8 +4,8 @@
   "description": "// Using VITE  For the front end Application. 'Dont create a frontEnd folder just yet '\r npm create vite@latest",
   "main": " backend/index.js",
   "scripts": {
-    "dev":  " nodemon backend/index.js",
-		"start": " node backend/index.js"
+    "dev": " nodemon backend/index.js",
+    "start": " node backend/index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,8 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
+   
     "nodemon": "^3.1.9"
+ 
   }
 }

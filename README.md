@@ -1,5 +1,5 @@
 
-  // Using VITE  For the front end Application. 'Dont create a frontEnd folder just yet '
+// Using VITE  For the front end Application. 'Dont create a frontEnd folder just yet '
 npm create vite@latest 
 
 project name ...> frontend
@@ -9,7 +9,7 @@ cd frontend
 type in  ->   npm i
   
 //Add More Packages .
-npm i react-router-dom axios react-cookie notistack react-icons recoil date-fns framer-motion zustand socket.io-client
+npm i react-router-dom axios react-cookie notistack react-icons recoil date-fns framer-motion zustand socket.io-client react-hot-toast
 
 Folder Setup 
 
@@ -30,3 +30,7 @@ inside json file  under Script remove the following:
 		"start": " node backend/index.js",
 
     
+Tailwind 
+npm install tailwindcss postcss-cli autoprefixer
+
+npx tailwindcss-cli@latest init

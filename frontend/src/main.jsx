@@ -11,6 +11,8 @@ import {SnackbarProvider} from 'notistack'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
+
+  
      <SnackbarProvider>
       <>
       <App />
