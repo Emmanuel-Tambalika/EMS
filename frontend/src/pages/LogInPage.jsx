@@ -21,7 +21,7 @@ const LogInPage = () => {
 
 		try {
 			await login(email, password);  
-			navigate("/MemberHome");
+			navigate("/EventsPage");
 			
 		} catch (error) {
 			//navigate("/MemberHome");

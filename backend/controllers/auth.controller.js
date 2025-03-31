@@ -1,11 +1,12 @@
+
 import bcryptjs from "bcryptjs";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { User } from "../models/User.model.js";  
 
 
 export const signup = async (req, res) => {
-	const { email, password, name } = req.body;
-
+	 const { email, password, name } = req.body;
+   
 	try {    
 		if (!email || !password || !name) {
 			throw new Error("All fields are required");
@@ -21,7 +22,7 @@ export const signup = async (req, res) => {
 		const hashedPassword = await bcryptjs.hash(password, 10);
 		
 
-		const user = new User({
+	    	const user = new User({
 			email,
 			password: hashedPassword,
 			name,
@@ -33,7 +34,6 @@ export const signup = async (req, res) => {
 		// jwt
 		generateTokenAndSetCookie(res, user._id);
 
-		
 		res.status(201).json({
 			success: true,
 			message: "User created successfully",
@@ -42,6 +42,7 @@ export const signup = async (req, res) => {
 				password: undefined,
 			},
 		});
+		
 	} catch (error) {
 		res.status(400).json({ success: false, message: error.message });
 	}

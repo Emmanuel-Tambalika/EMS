@@ -6,4 +6,270 @@
 }
  
 
+.verification-form1{
+    margin-left: 30%;
+    margin-top: 2%;
 
+}
+
+.create-Event{
+    margin-left: 10%;
+    margin-top: 2%;
+
+}
+
+.create-event-button{
+    display: inline;
+    font-size: 3rem;
+    color:#ececf1;
+    background-color: rgb(7, 50, 238);
+    margin-left:  30%;
+    margin-top: 5%;
+}
+
+.create-event-button1{
+    display: inline;
+    font-size: 2rem;
+    color:#ececf1;
+    background-color: rgb(14, 50, 211);
+    margin-left:10%;
+    margin-top: 15%;
+}
+
+.back-button{
+color:green;
+padding:4px;
+background-color:gold;
+margin-left:-10px;
+margin-top:-10px;
+font-size:250rem;
+}
+
+
+
+/* Calendar Container Styles */
+.calendar-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background:rgb(199, 205, 211);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+}
+
+/* Calendar Component */
+.react-calendar {
+    width: 5%;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top:-305px;
+    margin-left :65%;
+    position:absolute;
+    
+}
+
+.react-calendar__tile {
+    padding: 8px;
+    transition: background 0.3s ease;
+}
+
+.react-calendar__tile--active {
+    background: #e9ecef;
+}
+
+.react-calendar__month-view__weekdays {
+    background: #f8f9fa;
+}
+
+.react-calendar__tile--now {
+    background: #e2e3e5;
+}
+
+/* Events List */
+.events-list {
+    display:inline-block;
+    margin-top:7%;
+    gap: 1.5rem;
+    padding:0.6rem;
+ 
+}
+
+
+.event-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    background-color:gray;
+    max-width:250px;
+    display:inline-block;
+    margin-top:-5.5rem;
+    margin-left:4rem;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+}
+
+.event-card h3 {
+    background-color:gold;
+    color:rgb(235, 235, 230);
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    
+     
+}
+
+.event-card p {
+    margin-bottom: 0.8rem;
+    color:gold;
+}
+
+.event-card p strong {
+    color:rgb(211, 211, 212);
+}
+
+/* No Events Message */
+.no-events {
+    text-align: center;
+    padding: 2rem;
+    color:rgb(15, 14, 7);
+    font-size: 2.1rem;
+    margin-left:20%;
+    margin-top :-20%;
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: 2rem;
+    color: #3498db;
+    font-size: 1.1rem;
+    margin-left:70%;
+}
+
+
+
+.main-title{
+margin-left:50%;
+font-size:2rem;
+color: green;
+
+}
+
+/* Book-ticket sTYLING*/
+
+.book-ticket {
+  background-color: #FF5733;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+}
+
+.book-ticket:hover {
+  background-color: #FFC300;
+  color: #000000;
+}
+
+.book-ticket {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Booking Modal  sTYLING*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  contain: strict;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 3; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.2s ease;
+}
+
+input:focus, select:focus {
+  border-color: #FF5733;
+  outline: none;
+}
+
+.submit-btn {
+  background: #FF5733;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #FFC300;
+}

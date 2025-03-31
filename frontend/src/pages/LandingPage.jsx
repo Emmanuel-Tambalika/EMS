@@ -1,8 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-
-
-
 import react from '../assets/react.svg'
 
 import IntroCard from '../components/introCard'

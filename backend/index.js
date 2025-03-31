@@ -8,25 +8,22 @@ import  path from "path";
 import { connectDB } from "./db/connectDB.js";
 
 import authRoutes from "./routes/auth.route.js";
-import { eventsRouter } from "./routes/events.route.js";
-import { venuesRouter } from "./routes/venues.route.js";
+import eventRoutes from "./routes/events.route.js"
 
+     
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve();
+const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve(); 
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "http://localhost:5174", credentials: true }));
 
 app.use(express.json()); // allows us to parse incoming requests:req.body
 app.use(cookieParser()); // allows us to parse incoming cookies
 
 app.use("/api/Log-In", authRoutes);
-app.use("/myBookings", eventsRouter);
-app.use("/myVenues", venuesRouter);
-
-
+app.use("/api/events", eventRoutes)
 
 
 if (process.env.NODE_ENV === "production") {

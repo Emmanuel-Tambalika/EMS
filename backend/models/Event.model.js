@@ -5,41 +5,58 @@ const eventSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique: true, 
+      
         }, 
 
-        description: {
+        description: { 
             type: String,
             required: true,
           },
-        Price: { 
+        ordinary: { 
             type: Number,
             required: true,
         },
-       Venue: { 
+
+       vip :{
+            type: Number,
+            required: true,
+             },
+
+             
+          vippremium: {
+                type: Number,
+            required: true,
+             },
+
+        date:{
+           type: Date,
+            required: true,
+        },
+       venue: { 
             type: String,
             required: true,
         },
 
         //Show All Tickets Available On Event Creation Number Is Subject To change
-      TotalTickets: {
+      totalTickets: {
             type: Number,
             required: true,
         },
         
         bookedTickets:{
            type:Number, 
+            default: 0,
+             min: 0,
         },
 
         SoldTickets:{
             type:Number, 
+             default: 0,
+               min: 0,
          },
 
         userOwner: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-          },
+            type: mongoose.Schema.Types.ObjectId,   ref: "User",},
 
     },
     // Must Add Booked Event Payment Timer .

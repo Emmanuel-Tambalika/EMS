@@ -21,7 +21,7 @@ const SignUpPage = () => {
  
 		try { 
 			await signup(email, password, name);
-			navigate("/verify-email");
+			navigate("/emsFAQ");
 		} catch (error) {
 			console.log(error);
 		}
@@ -41,7 +41,7 @@ const SignUpPage = () => {
 					Create Account
 				</h2>
 
-				<form onSubmit={handleSignUp}>
+				 <form onSubmit={handleSignUp}>
 					<Input
 						icon={User}
 						type='text'

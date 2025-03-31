@@ -8,7 +8,7 @@ const MyBookings = () => {
 
     <div>
 
-    <p className='View-Para'>The Booked Events</p>
+    <p className='View-Para'> Find Booked Events here!</p>
 
     </div>
   )

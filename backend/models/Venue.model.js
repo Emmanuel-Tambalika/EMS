@@ -17,9 +17,10 @@ const venueSchema = new mongoose.Schema(
             required: true,
         },
 
-       Capacity: { 
+       capacity: { 
             type:Number,
             required: true,
+            Min:5,
         },
       
         isAvailable: {
@@ -36,14 +37,10 @@ const venueSchema = new mongoose.Schema(
 			type: Boolean,
 			 default: false,
 		},
-
+ 
 // Must Add Booked Venue Payment Timer .
 
-        
-        userOwner: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
+        userOwner: {type: mongoose.Schema.Types.ObjectId,ref: "User",
           },
 
     },

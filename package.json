@@ -4,7 +4,7 @@
   "description": "// Using VITE  For the front end Application. 'Dont create a frontEnd folder just yet '\r npm create vite@latest",
   "main": " backend/index.js",
   "scripts": {
-    "dev": " nodemon backend/index.js",
+    "dev": " nodemon backend/server.js",
     "start": " node backend/index.js"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "cron": "^4.1.0",
@@ -23,8 +24,6 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-   
     "nodemon": "^3.1.9"
- 
   }
 }

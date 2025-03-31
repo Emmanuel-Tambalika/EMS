@@ -6,53 +6,145 @@ import { User } from "../models/User.model.js";
 
 const router = express.Router();
 
+import { signup2  } from "../controllers/event.controller.js";
 
-router.get("/", async (req, res) => {
-    try {
-      const result = await Event.find({});
-      res.status(200).json(result);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
-  
-  // Create a new Event 
-router.post("/",  async (req, res) => {
-    const event = new Event({
-      _id: new mongoose.Types.ObjectId(),
-      name: req.body.name,
-      description: req.body. description,
-      Price : req.body.Price,
-      Venue: req.body.Venue,
-      TotalTickets :req.bodyTotalTickets,
-      userOwner: req.body.userOwner,
-    });
-    console.log(event);
-  
-    try {
-      const result = await event.save();
-      res.status(201).json({
-        createdEvent: {
-          name: result.name,
-          _id: result._id,
-        },
-      });
-    } catch (err) {
-      // console.log(err);
-      res.status(500).json(err);
-    }
-  });
-  
-  // Get an Event by ID
-router.get("/:eventId", async (req, res) => {
+
+router.post("/signup", signup2);
+ 
+// Route to Save A new  Event
+router.post( '/' , async (request,response) =>  {
   try {
-    const result = await Event.findById(req.params.eventId);
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json(err);
+       if(
+        !request.body.name||
+        !request.body.description||
+        !request.body.ordinary||
+        !request.body.vip||
+        !request.body.vippremium||
+        !request.body.date ||
+        !request.body.venue||  
+        !request.body.totalTickets)
+       {
+        return response.status(400).send({message:'Send all required fields:name ,description ,and Others' ,});
+    
+    }
+
+     const newEvent = {
+               name:request.body.name, 
+               description:request.body.description,
+               ordinary:request.body.ordinary,
+               vip:request.body.vip,
+               vippremium:request.body.vippremium,
+               date:request.body.date,
+               venue:request.body.venue,
+               totalTickets:request.body.totalTickets,
+     }; 
+ 
+     const event = await Event.create(newEvent);
+     return response.status(201).send(event);
+  } 
+  
+  catch (error) {
+    console.log(error.message);
+    response.status(500).send ({message:error.message});
   }
 });
 
+
+// Update  An Event  With Mongoose .
+router.put('/:id' , async (request , response) => {
+  
+  try {
+      (
+        !request.body.name||
+        !request.body.description||
+        !request.body.price||
+        !request.body.date ||
+        !request.body.venue||  
+        !request.body.totalTickets
+      )
+      {
+       
+       return response.status(400).send({message:'Send all required fields:title ,author ,publishYear',
+
+       });
+ 
+      }
+
+       const {id} = request.params;
+
+       const result = await Event.findByIdAndUpdate(id , request.body);
+
+       if(!result){
+         return response.status(404).json({message:'Event Not Found'});
+       }
+         return response.status(200).send({message:'Event Updated Successfully '});
+
+    } catch (error) {
+       console.log(error.message);
+       response.status(500).send({message:error.message});
+  }
+  
+});
+
+
+
+// Route to get all events or filter by date
+router.get("/", async (req, res) => {
+    try {
+        const { date } = req.query;
+        let events;
+
+        if (date) {
+            // Filter events by the specified date
+            const  endOfDay  = new Date(date).setHours(0, 0, 0, 0);
+            const  startOfDay = new Date(date).setHours(23, 59, 59, 999);
+
+            events = await Event.find({
+                date: { $gte: new Date(endOfDay), $lt: new Date(startOfDay) }
+            }).sort({ date: "asc" });
+         } 
+        res.status(200).json(events);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Will TAke These to The Controllers . 
+
+ 
 // Save a Event
 router.put("/", async (req, res) => {
   const event = await Event.findById(req.body.eventId);
@@ -93,4 +185,5 @@ router.get("/bookedEvents/:userId", async (req, res) => {
   }
 });
 
-export { router as eventsRouter };
+
+export default router;
