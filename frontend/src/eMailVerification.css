@@ -46,7 +46,6 @@ font-size:250rem;
 }
 
 
-
 /* Calendar Container Styles */
 .calendar-section {
     max-width: 1200px;
@@ -66,7 +65,7 @@ font-size:250rem;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin-top:-305px;
+    margin-top:-315px;
     margin-left :65%;
     position:absolute;
     
@@ -98,7 +97,6 @@ font-size:250rem;
  
 }
 
-
 .event-card {
     background: white;
     padding: 30px;
@@ -110,6 +108,7 @@ font-size:250rem;
     display:inline-block;
     margin-top:-5.5rem;
     margin-left:4rem;
+    margin-bottom: 10rem;
 }
 
 .event-card:hover {
@@ -135,13 +134,27 @@ font-size:250rem;
 }
 
 /* No Events Message */
-.no-events {
+.no-events1 {
     text-align: center;
-    padding: 2rem;
+    display: inline;
+    padding: 1rem;
     color:rgb(15, 14, 7);
-    font-size: 2.1rem;
-    margin-left:20%;
-    margin-top :-20%;
+    font-size: 3.1rem;
+    margin-left:210px;
+    margin-top :-20px;
+    background-color: gold;
+   
+}
+
+.no-events {
+  text-align: center;
+  display: inline;
+  padding: 1rem;
+  color:rgb(15, 14, 7);
+  font-size: 3.1rem;
+  margin-left:50px;
+  margin-top :-20%;
+  margin-right: 70px;
 }
 
 /* Loading State */
@@ -152,8 +165,6 @@ font-size:250rem;
     font-size: 1.1rem;
     margin-left:70%;
 }
-
-
 
 .main-title{
 margin-left:50%;
@@ -218,16 +229,21 @@ color: green;
 }
 
 .modal-header {
+  margin-top: -2px;
   display: flex;
+  background-color: rgb(219, 206, 206);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .close-btn {
+  margin-top: -120px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 3.5rem;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -272,4 +288,32 @@ input:focus, select:focus {
 
 .submit-btn:hover {
   background: #FFC300;
+}
+
+.event_Name {
+  margin-top: 45px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: large;
+  margin-left:-70%;
+  background-color: #fcfcfb;
+  color: #2d0de4;
+}
+.event_Name1{
+  margin-top: 105px;
+  text-align: center;
+  font-size: large;
+  margin-left:-60%;
+  background-color: #ededee;
+  color: #09a109;
+  border-radius:5px;
+}
+.yourTicket{
+  margin-bottom: 20%;
+  margin-left: 30%;
+  font-size: 1.5rem;
+   color: goldenrod;
+   background-color: white;
+   padding: 5%;
+  border-radius: 5px;
 }

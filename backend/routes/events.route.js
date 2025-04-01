@@ -15,6 +15,7 @@ router.post("/signup", signup2);
 router.post( '/' , async (request,response) =>  {
   try {
        if(
+
         !request.body.name||
         !request.body.description||
         !request.body.ordinary||
@@ -22,7 +23,11 @@ router.post( '/' , async (request,response) =>  {
         !request.body.vippremium||
         !request.body.date ||
         !request.body.venue||  
-        !request.body.totalTickets)
+        !request.body.totalTickets
+      
+
+        
+        )
        {
         return response.status(400).send({message:'Send all required fields:name ,description ,and Others' ,});
     
@@ -37,6 +42,8 @@ router.post( '/' , async (request,response) =>  {
                date:request.body.date,
                venue:request.body.venue,
                totalTickets:request.body.totalTickets,
+              
+
      }; 
  
      const event = await Event.create(newEvent);
@@ -55,18 +62,19 @@ router.put('/:id' , async (request , response) => {
   
   try {
       (
+        
         !request.body.name||
         !request.body.description||
-        !request.body.price||
+        !request.body.ordinary||
+        !request.body.vip||
+        !request.body.vippremium||
         !request.body.date ||
         !request.body.venue||  
         !request.body.totalTickets
       )
       {
        
-       return response.status(400).send({message:'Send all required fields:title ,author ,publishYear',
-
-       });
+       return response.status(400).send({message:'Send all required fields'});
  
       }
 
@@ -93,6 +101,7 @@ router.get("/", async (req, res) => {
     try {
         const { date } = req.query;
         let events;
+      
 
         if (date) {
             // Filter events by the specified date
@@ -100,7 +109,7 @@ router.get("/", async (req, res) => {
             const  startOfDay = new Date(date).setHours(23, 59, 59, 999);
 
             events = await Event.find({
-                date: { $gte: new Date(endOfDay), $lt: new Date(startOfDay) }
+                date: {$lt : new Date( startOfDay),  $gte: new Date( endOfDay) }
             }).sort({ date: "asc" });
          } 
         res.status(200).json(events);
@@ -111,7 +120,18 @@ router.get("/", async (req, res) => {
 
 
 
-
+// Save a Event
+router.put("/", async (req, res) => {
+  const event = await Event.findById(req.body.eventId);
+  const user = await User.findById(req.body.userID);
+  try {
+    user.bookedEvents.push(event);
+    await user.save();
+    res.status(201).json({  bookedEvents: user. bookedEvents });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 
 

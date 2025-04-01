@@ -5,14 +5,14 @@ const venueSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique: true, 
+           
         }, 
 
         description: {
             type: String,
             required: true,
           },
-        Price: { 
+        price: { 
             type: Number,
             required: true,
         },

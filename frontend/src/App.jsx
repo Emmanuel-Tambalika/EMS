@@ -22,7 +22,7 @@ import Profile from './pages/Profile.jsx'
 
 //Others
 import CreateEvent from './pages/CreateEvent.jsx' 
-import CreateVenue from  './pages/CreateVenue.jsx' 
+import VenueModal from './pages/VenueModal.jsx';
 
 
 const App = () => {
@@ -48,7 +48,7 @@ const App = () => {
 
        <Route path='/Venues'element={<Venues/>}/>
        <Route path='/ALL-Venues'  element={<AllVenues/>}/>
-       <Route path='/create-Venue' element={<CreateVenue/>}/>
+       <Route path='/Create-Venue'  element={<VenueModal/>}/>
        <Route path='/my-Venues'  element={<MyVenues/>}/>
        <Route path='/profilePage'  element={<Profile/>}/>
        <Route path='/MailPage'  element={<Mail/>}/>
