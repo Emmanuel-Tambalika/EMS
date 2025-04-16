@@ -1,17 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { Link } from 'react-router-dom';
-import { MdInbox, MdOutlineAddBox, MdOutlineDelete, MdOutlineSearch } from 'react-icons/md';
+import { MdInbox,MdMail,MdPerson, MdOutlineAddBox, MdOutlineDelete, MdBook, MdOutlineSearch } from 'react-icons/md';
 import { useAuthStore } from "../store/authStore";
-//import { Elements } from '@stripe/react-stripe-js';
-//import { loadStripe } from '@stripe/stripe-js';
-
-
-//const stripePromise = loadStripe('pk_test_51HP6GwKzoxkKrQNZgUJcBm6yfEvua3cwpwPKJBySmzEl2xLznX5YFLecRlVvTJ2MQcHkZMFh1b4JsL6ceEN8mzVk00SLssI3ux'); // Replace with your actual Stripe publishable key
-
 import BookingModal from "../components/BookingModal.jsx"
- //import PaymentForm from '../components/paymentForm.jsx';
-import DeleteEvent from '../components/DeleteEvent.jsx';
+import MyBookings from './MyBookings.jsx';
+
+import '../App.css'
+import react from '../assets/react.svg'
 
 //Deal Wit Styling 
 import 'react-calendar/dist/Calendar.css';
@@ -19,15 +16,13 @@ import '../eMailVerification.css';
 
 import '../Events.css'
 
-const AllEvents = () => {
+const AttendeeHome = () => {
     const [events, setEvents] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpen1, setIsModalOpen1] = useState(false);
-    
 
  //   const { user } = useAuthStore();
 // <p className=' ml-10 md-20 mt-(-50) text-3xl font-bold'> Welcome {user.name}!</p>
@@ -37,11 +32,7 @@ const AllEvents = () => {
         setIsModalOpen(true)
     };
 
-    const handleBooking1 = (event) => {
-        setSelectedEvent(event);
-        setIsModalOpen(false);
-        setIsModalOpen1(true)
-    };
+
 
 
     // Fetch all events or filter by date
@@ -77,9 +68,6 @@ const AllEvents = () => {
         fetchEvents();
     }, []);
 
-
-    
-
     return (
         <div className="events-container">
             {/* Render modal */}
@@ -88,22 +76,19 @@ const AllEvents = () => {
                 onClose={() => setIsModalOpen(false)}
                 event={selectedEvent}
             />
-
-            <DeleteEvent
-            
-                isOpen={isModalOpen1}
-                onClose={() => setIsModalOpen1(false)}
-                event={selectedEvent}
-            />
       
-            <div>
-                <Link to='/create-Events'
-                
-                >
-                 <MdOutlineAddBox className='create-event-button'/>
-                  <p className='create-event-mate'> Create Event</p>
-                </Link>
-            </div>
+           <div>
+                   <h1 className='landing-h1'><img className='logo-img'
+                     src={react} alt="Company-logo" />EMS</h1>
+                 </div>
+           
+                 <nav className='Nav-bar'>
+           
+                   <li className='link-li'> <Link to='/my-Bookings'> <MdBook size={40} color="blue" /> My Bookings</Link></li>
+                   <li className='link-li'> <Link to='/MailPage'> <MdMail size={40} color="blue" /> Mail</Link></li>
+                   <li className='link-li'><Link to='/profilePage'> <MdPerson size={40} color="blue" /> Profile</Link></li>
+           
+                 </nav>
 
 
             {/* Calendar Section */}
@@ -152,13 +137,7 @@ const AllEvents = () => {
                                         <button
                                             className="book-ticket"
                                             onClick={() => handleBooking(event)}>
-                                        Edit
-                                        </button>
-
-                                        <button
-                                            className="book-ticket"
-                                            onClick={() => handleBooking1(event)}>
-                                        Delete
+                                      Book Ticket
                                         </button>
 
                                     </div>
@@ -168,7 +147,7 @@ const AllEvents = () => {
                                     <p className="no-events" >No events yet!</p>
                                 </div>
                             )} 
-                          
+                           
                         </div>
                     )
 
@@ -176,12 +155,10 @@ const AllEvents = () => {
 
             </div>
 
-    
 
-   
 
         </div>
     );
 };
 
-export default AllEvents;
+export default AttendeeHome;

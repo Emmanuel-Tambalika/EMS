@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		lastLogin: {
+		 lastLogin: { 
 			type: Date,
 			default: Date.now,
 		},
@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema(
        // Booked Venue.
        bookedVenues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Venue" }],
 
-
+	    userOwner:{type: mongoose.Schema.Types.ObjectId ,ref: "User",
+	},
 
 	},
 	{ timestamps: true }

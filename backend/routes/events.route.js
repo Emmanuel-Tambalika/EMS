@@ -1,12 +1,14 @@
 
 import express from "express";
-import mongoose from "mongoose";
 import { Event } from "../models/Event.model.js";
 import { User } from "../models/User.model.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+
+
 
 const router = express.Router();
 
-import { signup2  } from "../controllers/event.controller.js";
+ import { signup2  } from "../controllers/event.controller.js";
 
 
 router.post("/signup", signup2);
@@ -96,7 +98,7 @@ router.put('/:id' , async (request , response) => {
 
 
 
-// Route to get all events or filter by date
+   // Route to get all events or filter by date
 router.get("/", async (req, res) => {
     try {
         const { date } = req.query;
@@ -118,20 +120,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-
-
-// Save a Event
-router.put("/", async (req, res) => {
-  const event = await Event.findById(req.body.eventId);
-  const user = await User.findById(req.body.userID);
-  try {
-    user.bookedEvents.push(event);
-    await user.save();
-    res.status(201).json({  bookedEvents: user. bookedEvents });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 
 

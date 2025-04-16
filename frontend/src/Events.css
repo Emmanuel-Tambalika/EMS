@@ -1,0 +1,92 @@
+.create-event-mate{
+
+    margin-left: 260px;
+    margin-top: -2%;
+    font-weight: bolder;
+    color: rgb(128, 94, 0);
+    font-size: 1.4rem;
+}
+
+
+/* Calendar Container Styles  On Attendee Home*/
+.calendar-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background:rgb(198, 206, 179);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-height: 1200px;
+
+}
+
+/* Calendar Component */
+.react-calendar {
+ 
+  margin-bottom: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top:-215px;
+  margin-left :70%;
+  position:absolute;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.react-calendar__tile {
+    padding: 8px;
+    transition: background 0.3s ease;
+}
+
+.react-calendar__tile--active {
+    background: #e9ecef;
+}
+
+.react-calendar__month-view__weekdays {
+    background: #f8f9fa;
+}
+
+.react-calendar__tile--now {
+    background: #e2e3e5;
+}
+
+/* Events List */
+.events-list {
+    display:inline-block;
+    margin-top:11%;
+    gap: 1.5rem;
+    padding:0.6rem;
+ 
+}
+
+.event-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    background-color:gray;
+    max-width:250px;
+    display:inline-block;
+    margin-top:-5.5rem;
+    margin-left:4rem;
+    margin-bottom: 10rem;
+}
+nav, Link{
+    border: #0515a1;
+    border-radius: 45%;
+    display:flex;
+    justify-content:space-around;
+    border-radius:1%;
+     background-color: rgb(199, 192, 158);
+    font-size: large;
+    color:rgb(251, 251, 252);
+    padding:12px;
+    list-style: none;
+    margin-left:6%;
+    margin-right:25%;
+    margin-top: 2px;
+    max-width: auto;
+    max-height: auto;
+}

@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
-
+ 
 const eventSchema = new mongoose.Schema(
     {
         name: {
             type: String,
             required: true,
 
-        },
+        },  
 
         description: {
             type: String,
             required: true,
         },
-        ordinary: {
+         ordinary: {
             type: Number,
             required: true,
         },
@@ -42,10 +42,18 @@ const eventSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+ 
 
-        userOwner: {
+          isBooked: {
+            type: Boolean,
+            default: false,
+      },
+
+          userOwner: {
             type: mongoose.Schema.Types.ObjectId, ref: "User",
         },
+
+
 
     },
     // Must Add Booked Event Payment Timer .

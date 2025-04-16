@@ -10,8 +10,8 @@ import AllEvents from './AllEvents.jsx'
 import MyBookings from './MyBookings.jsx';
 
 const Events = () => {
+ 
 
-  const [showType, setShowType] = useState('View1');
 
 
   return (
@@ -31,40 +31,8 @@ const Events = () => {
       </nav>
 
 
-
-      <div className='flex justify-center  items-center gap-x-4 '>
-
-        <button className='View1'
-          onClick={() => setShowType('View1')}
-        >
-          <div>
-
-            Events  <MdEvent className='create-event-button' />
-
-          </div>
-        </button>
-
-        <button
-
-          className='View2'
-          onClick={() => setShowType('View2')}
-        >
-          <div>
-
-            Bookings <MdBook className='create-event-button' />
-
-          </div>
-        </button>
-
-      </div>
-
-      {
-
-        showType === 'View1' ? (<AllEvents />) : (<MyBookings />)
-
-
-      }
-
+     
+<AllEvents/>
 
     </div>
   )

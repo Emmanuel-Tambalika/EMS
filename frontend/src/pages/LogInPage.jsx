@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
-
+  
 import '../eMailVerification.css';
 
 const LogInPage = () => {
@@ -30,7 +30,7 @@ const LogInPage = () => {
 	};
 
 	return (
-          <div className="log-form"> 
+          <div className="verification-form"> 
 		<div className='form-div'>
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
@@ -40,9 +40,12 @@ const LogInPage = () => {
 		>
 			<div className='p-8'>
 				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-emerald-500 text-transparent bg-clip-text'>
-					Welcome Back
+					Welcome Back  
 				</h2>
-
+				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-emerald-500 text-transparent bg-clip-text'>
+					 Event  Organizer !
+				</h2>
+                
 				<form onSubmit={handleLogin}>
 					<Input
 						icon={Mail}

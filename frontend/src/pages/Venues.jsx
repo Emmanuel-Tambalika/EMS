@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdInbox, MdOutlineAddBox, MdOutlineDelete, MdOutlineSearch } from 'react-icons/md';
 
 
-
+ 
 import '../App.css'
 import react from '../assets/react.svg'
 
@@ -36,7 +36,7 @@ const Venues = () => {
       className='View2'
       onClick={()=> setShowType('View2')}
       >
-     My Venues
+      My Venues
       </button>
     
       </div>
@@ -47,11 +47,6 @@ const Venues = () => {
       
        
       }
-   
-                  <Link to='/Create-Venue'>
-                  <MdOutlineAddBox className='create-event-button'/>
-                  </Link>
-
     </div>
   )
 }

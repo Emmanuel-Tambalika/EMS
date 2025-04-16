@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import react from '../assets/react.svg'
 
-import IntroCard from '../components/introCard'
-import LogInPage from './LogInPage';
+import IntroCard from '../components/introCard.jsx'
+import ChooseAccount from './ChooseAccount.jsx';
 
 const LandingPage = () => {
 
   return (
 
-    <div className=''>
+    <div >
        
        <div>
         <h1 className='landing-h1'><img className='logo-img' 
@@ -32,8 +32,8 @@ const LandingPage = () => {
        EMSRole4="4) Get Notified about All Events ,  related Information and News . "
        />
 
-       <LogInPage/>
-
+        <ChooseAccount/>
+ 
     </div>
   )
 }

@@ -1,0 +1,71 @@
+.account-profile{
+    display: inline;
+    font-size:2rem;
+    color:#773805;
+    background-color: rgb(194, 21, 44);
+    margin-left:40%;
+    margin-top: 15%;
+  } 
+
+  .Account-form{
+    margin-left: 40%;
+    margin-top: -30%;
+    max-width: 750px;
+
+}
+
+.person_div{
+margin-top: 5px;
+border-radius: 10%;
+background-color: rgb(244, 247, 98);
+max-width: 200px;
+margin-left: 20px;
+border-color: rgb(14, 235, 7);
+border-width: 2px;
+
+}
+
+.person_div1{
+
+margin-top: -100px;
+margin-left: 250px;
+border-radius: 10%;
+background-color: rgb(243, 234, 174);
+max-width: 200px;
+border-color: rgb(14, 235, 7);
+border-width: 2px;
+}
+.person_div2{
+  margin-top: -90px;
+  margin-left: 500px;
+  border-radius: 10%;
+  background-color: rgb(123, 235, 123);
+  max-width: 200px;
+  border-color: rgb(2, 2, 2);
+border-width: 2px;
+  }
+  
+.profile-label{
+  margin-left: 120px;
+  background-color: rgb(243, 243, 243);
+  max-width: 300px;
+  font-size: 1.5rem;
+}
+
+
+.account-profile{
+  display: inline;
+  font-size:5rem;
+  color:#ececf1;
+  background-color: rgb(121, 134, 228);
+  margin-left:25%;
+  margin-top: 15%;
+}
+
+.profile-button{
+  font-size:1.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  margin-left: 10px;
+font-style:normal;
+
+}

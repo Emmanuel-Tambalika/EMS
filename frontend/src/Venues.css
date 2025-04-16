@@ -1,0 +1,36 @@
+.filter-venue{
+    display: inline-block;
+    max-width: 600px;
+    margin-left:50px;
+}
+.filter-venue1{
+    display: inline-block;
+    max-width: 800px;
+    margin-left: 220px;
+
+}
+
+.filter-byPrice{
+    display: inline-block;
+    max-width: 800px;
+    margin-left:300px;
+    margin-top: -60%;
+}
+
+.fitlter_all_venues{
+    margin-top: 5px;
+    margin-bottom: 15px;
+background-color: rgb(127, 131, 131);
+max-width:max-content;
+margin-left: 10%;
+margin-right: 10%;
+color: rgb(0, 0, 0);
+}
+
+.Pay-button{
+background-color: rgb(236, 130, 9);
+margin-top: 20px;
+margin-bottom: 20px;
+margin-left: 20px;
+
+}

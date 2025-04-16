@@ -10,9 +10,15 @@ import  path from "path";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+
 import authRoutes from "./routes/auth.route.js";
  import eventRoutes from "./routes/events.route.js";
- import venueRoutes from "./routes/venues.route.js"
+ import venueRoutes from "./routes/venues.route.js";
+ import bookingsRouter from "./routes/bookings.js";  // Import booking routes
+
+ 
+
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -26,9 +32,11 @@ app.use(cookieParser()); // allows us to parse incoming cookies
 app.use("/api/Log-In", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/venues", venueRoutes);
+app.use("/api/bookings", bookingsRouter);
 
 
-const __dirname = path.resolve();
+
+ const __dirname = path.resolve();
 
 app.listen(PORT, () => {
 	console.log("Server is running on port: ", PORT);

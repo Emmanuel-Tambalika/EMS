@@ -3,15 +3,16 @@ import { motion } from "framer-motion";
 import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom";
 import { SnackbarProvider, useSnackbar } from 'notistack';
-import BackButton from "../components/BackButton.jsx";
+import VenueBackButton from '../components/VenueBackButton';
 
 import '../eMailVerification.css';
 
-const VenueModal = () => {
-    const [name, setName] = useState("");
+const VenueModal =  () => {
+    const [name, setName] = useState();
     const [description, setDescription] = useState("");
-    const [capacity, setCapacity] = useState("0");
+    const [capacity, setCapacity] = useState("");
     const [price, setPrice] = useState("");
+    const [city, setCity] = useState("");
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ const VenueModal = () => {
             description,
             price,
             capacity,
+            city,
         };
        
         axios
@@ -29,7 +31,7 @@ const VenueModal = () => {
             .then(() => {
                 
                 enqueueSnackbar('Event Created Successfully', { variant: 'success' });
-                navigate('/Venues');
+                navigate('/VenueManager');
             })
 
             .catch((error) => {
@@ -48,7 +50,7 @@ const VenueModal = () => {
     return (
         <div className="create-Event">
 
-        <BackButton />
+        <VenueBackButton/>
 
         <h1 className='text-2xl my-2 '>  Create  venue </h1>
         <div className=' flex flex-col border-2 border-green-800 rounded-xl w-[600px] p-8 mx-auto'>
@@ -72,6 +74,7 @@ const VenueModal = () => {
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     className='border-2 border--gray-500 px-4 py-2 w-full'
+                    min={1}
                 />
             </div>
             <div className='my-4'>
@@ -81,6 +84,19 @@ const VenueModal = () => {
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
                     className='border-2 border--gray-500 px-4 py-2 w-full'
+                    min={25}
+                />
+            </div>
+
+
+            <div className='my-4'>
+                <label className='text-xl mr-4 text-blue-500'>City</label>
+                <input
+                    type='text'
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className='border-2 border--gray-500 px-4 py-2 w-full'
+                  
                 />
             </div>
 
@@ -97,7 +113,8 @@ const VenueModal = () => {
             </div>
  
 
-            <button className='p-2 bg-emerald-500 m-8' onClick={handleSaveEvent}>
+            <button className='p-2 bg-emerald-500 m-8'
+             onClick={handleSaveEvent}>
                 Save
             </button>
 

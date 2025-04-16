@@ -1,7 +1,7 @@
 
 .verification-form{
     margin-left: 30%;
-    margin-top: 10%;
+    margin-top: 6%;
 
 }
  
@@ -36,6 +36,14 @@
     margin-top: 15%;
 }
 
+.create-venue-button1{
+  display: inline;
+  font-size: 2rem;
+  color:#ececf1;
+  background-color: rgb(14, 50, 211);
+  margin-left:10%;
+ 
+}
 .back-button{
 color:green;
 padding:4px;
@@ -51,24 +59,25 @@ font-size:250rem;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 1rem;
-    background:rgb(199, 205, 211);
+    background:rgb(198, 206, 179);
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
+    max-height: 1200px;
 
 }
 
 /* Calendar Component */
 .react-calendar {
-    width: 5%;
-    margin-bottom: 2rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin-top:-315px;
-    margin-left :65%;
-    position:absolute;
-    
+ 
+  margin-bottom: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top:-170px;
+  margin-left :70%;
+  position:absolute;
+  max-width: 300px;
+  
 }
 
 .react-calendar__tile {

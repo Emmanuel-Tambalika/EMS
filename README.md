@@ -34,3 +34,5 @@ Tailwind
 npm install tailwindcss postcss-cli autoprefixer
 
 npx tailwindcss-cli@latest init
+
+npm install --save @stripe/stripe-js @stripe/react-stripe-js
