@@ -8,7 +8,7 @@ const eventSchema = new mongoose.Schema(
 
         },  
 
-        description: {
+           description: {
             type: String,
             required: true,
         },
@@ -42,8 +42,8 @@ const eventSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
- 
 
+       
           isBooked: {
             type: Boolean,
             default: false,
@@ -52,7 +52,11 @@ const eventSchema = new mongoose.Schema(
           userOwner: {
             type: mongoose.Schema.Types.ObjectId, ref: "User",
         },
-
+        organizer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+          },
 
 
     },

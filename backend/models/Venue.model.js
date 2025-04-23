@@ -1,4 +1,46 @@
-import express from "express";
+import mongoose from "mongoose";
+
+const venueSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true, min: 1 },
+    capacity: { type: Number, required: true },
+    city: { type: String },
+    isPaymentPending: { type: Boolean, default: false },
+    paymentTimeout: { type: Date },
+    isBooked: { type: Boolean, default: false },
+    bookedAt: { type: Date },
+    venuePaidFor: { type: Boolean, default: false },
+    paymentExpired: { type: Boolean, default: false },
+    userOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+  },
+  { timestamps: true }
+);
+
+export const Venue = mongoose.model("Venue", venueSchema);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import express from "express";
 import mongoose from "mongoose";
 
 const venueSchema = new mongoose.Schema(
@@ -36,17 +78,11 @@ const venueSchema = new mongoose.Schema(
             type: Date,
           },
       
-
-            isPaymentPending: {
-		       	type: Boolean,
-			      default: false,
-		    },
-   
-        isBooked: {
+          isBooked: {
 			  type: Boolean,
 			  default: false,
 		},
- 
+    bookedAt: Date,  // New field for unbook timer
 // Must Add Booked Venue Payment Timer .
 
         userOwner: {type: mongoose.Schema.Types.ObjectId ,ref: "User"},
@@ -55,4 +91,4 @@ const venueSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export const Venue = mongoose.model("Venue", venueSchema);
+export const Venue = mongoose.model("Venue", venueSchema); */

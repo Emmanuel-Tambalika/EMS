@@ -30,12 +30,23 @@ import Venues from './pages/Venues.jsx';
 import  MyBookings from './pages/MyBookings.jsx';
 import AllVenues from './pages/AllVenues.jsx';
 import MyVenues from './pages/MyVenues.jsx';
+
+import EmailNotificationList from './components/EmailNotificationList.jsx';
 import Mail from './pages/Mail.jsx';
+import EmailsSentToMe from './pages/EmailsSentToMe.jsx';
+
 import Profile from './pages/Profile.jsx'
 
 //Others Within To Create
 import CreateEvent from './pages/CreateEvent.jsx' 
 import VenueModal from './pages/VenueModal.jsx';
+
+//Payments Mate !
+import CheckoutPage from './pages/CheckoutPage.jsx';
+import SucessCheckout from './pages/SucessCheckout.jsx';
+
+//Tickets Payments . 
+import BookingCheckout from './pages/BookingCheckout.jsx';
 
 
 const App = () => {
@@ -59,19 +70,25 @@ const App = () => {
 
        <Route path='/VenueManager'  element={<VenueManagerHome/>}/>
        <Route path='/AttendeePage'  element={<AttendeeHome/>}/>
-
+   
 
        <Route path='/EventsPage'  element={<Events/>}/>
        <Route path='/All-events'  element={<AllEvents/>}/>
        <Route path='/create-Events' element={<CreateEvent/>}/>
        <Route path='/my-Bookings'  element={<MyBookings/>}/>
+       <Route path='/check-out'  element={<CheckoutPage/>}/>
+       <Route path='/Success-check-out'  element={<SucessCheckout/>}/>
+       <Route path='/booking-checkout'element={<BookingCheckout/>}/>
 
        <Route path='/venues'element={<Venues/>}/>
        <Route path='/ALL-Venues'  element={<AllVenues/>}/>
        <Route path='/Create-Venue'  element={<VenueModal/>}/>
        <Route path='/my-Venues'  element={<MyVenues/>}/>
        <Route path='/profilePage'  element={<Profile/>}/>
-       <Route path='/MailPage'  element={<Mail/>}/>
+       <Route path='/MailPage'  element={<EmailNotificationList/>}/>
+
+       <Route path='/emails'  element={<EmailsSentToMe/>}/>
+ 
        
 
       </Routes>

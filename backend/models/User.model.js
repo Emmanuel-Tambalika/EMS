@@ -26,8 +26,9 @@ const userSchema = new mongoose.Schema(
        // Booked Venue.
        bookedVenues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Venue" }],
 
-	    userOwner:{type: mongoose.Schema.Types.ObjectId ,ref: "User",
-	},
+	    userOwner:{type: mongoose.Schema.Types.ObjectId ,ref: "User"},
+
+	notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: "Notification" }]
 
 	},
 	{ timestamps: true }

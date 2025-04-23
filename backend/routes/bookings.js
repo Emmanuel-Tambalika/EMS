@@ -1,17 +1,25 @@
-// routes/bookings.js
 import express from "express";
+import Stripe from "stripe";
+import { User } from "../models/User.model.js";
+import { sendEmail } from "../utils/email.js";
+import { Email } from "../models/Email.model.js";
 import { Booking } from "../models/Booking.model.js";
 import { Event } from "../models/Event.model.js";
 import { verifyToken } from "../middleware/verifyToken.js";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();  
 
 const router = express.Router();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create a booking
 router.post("/", verifyToken, async (req, res) => {
   const userId = req.userId;
-  const { event: eventId, ticketsCount, ticketAmount } = req.body;
+  const { event: eventId, ticketsCount, ticketAmount, ticketDetails } = req.body;
 
-  if (!eventId || !ticketsCount || !ticketAmount) {
+  if (!eventId || !ticketsCount || !ticketAmount || !ticketDetails) {
     return res.status(400).json({ message: "Missing booking data" });
   }
 
@@ -19,21 +27,31 @@ router.post("/", verifyToken, async (req, res) => {
     const event = await Event.findById(eventId);
     if (!event) return res.status(404).json({ message: "Event not found" });
 
-    // Optional: Check if enough tickets available (implement as needed)
+    if (event.totalTickets < ticketsCount) {
+      return res.status(400).json({ message: "Not enough tickets available" });
+    }
 
     const booking = new Booking({
       user: userId,
       event: eventId,
       ticketsCount,
       ticketAmount,
+      ticketDetails,
       isPaymentPending: true,
-      paymentTimeout: new Date(Date.now() + 2 * 60 * 1000), // 2 min from now
+      paymentTimeout: new Date(Date.now() + 2 * 60 * 1000),
       isPaid: false,
     });
 
-    await booking.save();
+    await Event.findByIdAndUpdate(
+      eventId,
+      { $inc: { totalTickets: -ticketsCount } },
+      { new: true }
+    );
 
-    res.status(201).json(booking);
+    await booking.save();
+    const populatedBooking = await Booking.findById(booking._id).populate('event');
+    res.status(201).json(populatedBooking);
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
@@ -44,8 +62,12 @@ router.post("/", verifyToken, async (req, res) => {
 router.get("/my", verifyToken, async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.userId })
-      .populate("event")
+      .populate({
+        path: "event",
+        select: "name venue date"
+      })
       .sort({ createdAt: -1 });
+
     res.status(200).json(bookings);
   } catch (err) {
     console.error(err);
@@ -53,29 +75,44 @@ router.get("/my", verifyToken, async (req, res) => {
   }
 });
 
-// Pay for a booking
-router.post("/:bookingId/pay", verifyToken, async (req, res) => {
+// Delete booking endpoint
+router.delete("/:bookingId", verifyToken, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.bookingId)) {
+      return res.status(400).json({ message: "Invalid booking ID format" });
+    }
+
     const booking = await Booking.findById(req.params.bookingId);
     if (!booking) return res.status(404).json({ message: "Booking not found" });
 
+    if (booking.user.toString() !== req.userId.toString()) {
+      return res.status(403).json({ message: "Unauthorized access" });
+    }
+ 
     if (booking.isPaid) {
-      return res.status(400).json({ message: "Booking already paid" });
+      await Booking.deleteOne({ _id: booking._id });
+      return res.status(200).json({ message: "Paid booking deleted" });
     }
 
-    booking.isPaid = true;
-    booking.isPaymentPending = false;
-    booking.paymentTimeout = null;
-    await booking.save();
+    if (booking.isPaymentPending && booking.paymentTimeout > new Date()) {
+      return res.status(400).json({ 
+        message: "Cannot delete active pending booking" 
+      });
+    }
 
-    res.status(200).json({ message: "Payment successful", booking });
+    await Booking.deleteOne({ _id: booking._id });
+    res.status(200).json({ message: "Booking deleted successfully" });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Delete Error:", err);
+    res.status(500).json({ 
+      message: "Failed to delete booking",
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 });
 
-// Background job to expire unpaid bookings after timeout
+// Background ticket expiration job
 setInterval(async () => {
   try {
     const now = new Date();
@@ -85,33 +122,177 @@ setInterval(async () => {
     });
 
     for (const booking of expiredBookings) {
-      booking.isPaymentPending = false;
-      booking.isPaid = false;
-      booking.paymentTimeout = null;
-      await booking.save();
-      // Optionally notify user or free tickets
+      if (booking.isPaymentPending && !booking.isPaid) {
+        await Event.findByIdAndUpdate(
+          booking.event,
+          { $inc: { totalTickets: booking.ticketsCount } },
+          { new: true }
+        );  
+
+        booking.isPaymentPending = false;
+        booking.paymentTimeout = null;
+        await booking.save();
+      }
     }
   } catch (err) {
     console.error("Error expiring bookings:", err);
   }
-}, 10000);
-// Delete a booking by ID (only by owner)
-// Delete a booking by ID (only owner can delete)
-router.delete("/:bookingId", verifyToken, async (req, res) => {
-    try {
-      const booking = await Booking.findById(req.params.bookingId);
-      if (!booking) return res.status(404).json({ message: "Booking not found" });
-  
-      if (booking.user.toString() !== req.userId) {
-        return res.status(403).json({ message: "Unauthorized" });
-      }
-  
-      await booking.remove();
-      res.status(200).json({ message: "Booking deleted successfully" });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+}, 5000);
+
+// Payment intent creation
+router.post("/:id/create-payment-intent", verifyToken, async (req, res) => {
+  try {
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      user: req.userId
+    });
+
+    if (!booking) {
+      return res.status(404).json({ 
+        error: "Booking not found",
+        code: "BOOKING_NOT_FOUND" 
+      });
     }
-  });
-  
+
+    const amount = Math.round(booking.ticketAmount * 100);
+    
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "usd",
+      metadata: { 
+        bookingId: booking._id.toString(),
+        userId: req.userId.toString()
+      },
+      automatic_payment_methods: { enabled: true }
+    });
+
+    booking.paymentIntentId = paymentIntent.id;
+    await booking.save();
+
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      amount: paymentIntent.amount,
+      currency: paymentIntent.currency
+    });
+
+  } catch (err) {
+    console.error("Payment intent error:", err);
+    res.status(500).json({ 
+      error: "Payment system error",
+      code: "PAYMENT_SYSTEM_ERROR" 
+    });
+  }
+});
+
+// Payment confirmation endpoint
+router.post("/:id/pay", verifyToken, async (req, res) => {
+  try {
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      user: req.userId
+    }).populate("event user");
+
+    if (!booking) {
+      return res.status(404).json({ 
+        error: "Booking not found",
+        code: "BOOKING_NOT_FOUND" 
+      });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      booking.paymentIntentId
+    );
+
+    if (paymentIntent.status !== "succeeded") {
+      return res.status(402).json({ 
+        error: "Payment not completed",
+        code: "PAYMENT_INCOMPLETE" 
+      });
+    }
+
+    // Update booking status
+    booking.isPaid = true;
+    booking.isPaymentPending = false;
+    booking.paymentDate = new Date();
+    await booking.save();
+
+    // Send confirmation email
+   
+    // 1. Send emails
+    try {
+      // Attendee email
+      await sendEmail(
+        { email: booking.user.email },
+        "paymentSuccess",
+        {
+          user: booking.user,
+          booking: {
+            price: booking.ticketAmount,
+            event: {
+              name: booking.event.name,
+              date: booking.event.date
+            },
+            quantity: booking.ticketsCount,
+            ticketType: booking.ticketDetails?.type || "General"
+          }
+        }
+      );
+
+      // Organizer email
+      await sendEmail(
+        { email: booking.event.userOwner.email },
+        "newBookingAlert",
+        {
+          creator: booking.event.userOwner,
+          booking: {
+            event: {
+              name: booking.event.name,
+              date: booking.event.date
+            },
+            quantity: booking.ticketsCount,
+            price: booking.ticketAmount,
+            ticketType: booking.ticketDetails?.type || "General"
+          },
+          user: booking.user
+        }
+      );
+
+    
+    } catch (emailError) {
+      console.error('Email error:', emailError);
+    }
+
+    // 2. Create database notifications
+    try {
+      // Attendee notification
+      await Email.create({
+        recipient: booking.user,
+        message: `Payment confirmed for ${booking.event.name}`,
+        type: "payment" 
+      });
+
+      // Organizer notification
+      await Email.create({
+        recipient: booking.event.userOwner,
+        message: `New booking for ${booking.event.name} by ${booking.user.name}`,
+        type: "booking"
+      });
+    } catch (notificationError) {
+      console.error('Notification error:', notificationError);
+    }
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error("Payment confirmation error:", error);
+    res.status(500).json({ 
+      error: "Payment confirmation failed",
+      code: "PAYMENT_CONFIRMATION_ERROR" 
+    });
+  }
+});
+
+
 export default router;
+
+
