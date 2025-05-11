@@ -9,7 +9,7 @@ import { verifyToken } from "../middleware/verifyToken.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config();  
+dotenv.config();
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -292,6 +292,27 @@ router.post("/:id/pay", verifyToken, async (req, res) => {
   }
 });
 
+
+// Get all email notifications for logged-in user
+router.get("/my", verifyToken, async (req, res) => {    
+  try {
+    const notifications = await Notification.find({
+      recipient: req.userId // From verifyToken middleware
+    }).sort({ createdAt: -1 });
+
+    const formatted = notifications.map(notif => ({
+      _id: notif._id,
+      subject: `Booking Notification - ${notif.type}`,
+      message: notif.message,
+      createdAt: notif.createdAt.toISOString()
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
 
 export default router;
 

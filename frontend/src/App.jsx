@@ -29,7 +29,9 @@ import AllEvents from './pages/AllEvents.jsx';
 import Venues from './pages/Venues.jsx';
 import  MyBookings from './pages/MyBookings.jsx';
 import AllVenues from './pages/AllVenues.jsx';
+import AllVenues1 from './pages/AllVenues1.jsx';
 import MyVenues from './pages/MyVenues.jsx';
+import Venue1 from './pages/venue1.jsx';
 
 import EmailNotificationList from './components/EmailNotificationList.jsx';
 import Mail from './pages/Mail.jsx';
@@ -81,12 +83,13 @@ const App = () => {
        <Route path='/booking-checkout'element={<BookingCheckout/>}/>
 
        <Route path='/venues'element={<Venues/>}/>
+       <Route path='/venues1'element={<Venue1/>}/> 
        <Route path='/ALL-Venues'  element={<AllVenues/>}/>
+       <Route path='/ALL-Venues1'  element={<AllVenues1/>}/>
        <Route path='/Create-Venue'  element={<VenueModal/>}/>
        <Route path='/my-Venues'  element={<MyVenues/>}/>
        <Route path='/profilePage'  element={<Profile/>}/>
        <Route path='/MailPage'  element={<EmailNotificationList/>}/>
-
        <Route path='/emails'  element={<EmailsSentToMe/>}/>
  
        

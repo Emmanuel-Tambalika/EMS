@@ -1,168 +1,136 @@
 import express from "express";
 import { Email } from "../models/Email.model.js";
-import { sendEmail } from "../utils/email.js";
 import { Booking } from "../models/Booking.model.js";
-
 import { verifyToken } from "../middleware/verifyToken.js";
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
+dotenv.config();
 const router = express.Router();
 
-// Send booking confirmation email
-router.post("/booking-confirmation/:bookingId", verifyToken, async (req, res) => {
+// Enhanced email retrieval with pagination
+router.get('/', verifyToken, async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.bookingId)
-      .populate("user", "name email")
-      .populate({
-        path: "event",
-        populate: { path: "organizer", select: "name email" }
-      });
+    const { limit = 20, page = 1 } = req.query;
+    const skip = (page - 1) * limit;
 
-    if (!booking) {
-      return res.status(404).json({ error: "Booking not found" });
-    }
-
-    // Send customer email
-    await sendEmail(
-      { email: booking.user.email },
-      "paymentSuccess",
-      {
-        user: booking.user,
-        booking: {
-          price: booking.ticketAmount,
-          event: {
-            name: booking.event.name,
-            date: booking.event.date
-          },
-          quantity: booking.ticketsCount,
-          ticketType: booking.ticketDetails?.type || "General"
-        }
-      }
-    );
-
-    // Send organizer email
-    await sendEmail(
-      { email: booking.event.userOwner.email },
-      "newBookingAlert",
-      {
-        creator: booking.event.userOwner,
-        booking: {
-          event: {
-            name: booking.event.name,
-            date: booking.event.date
-          },
-          quantity: booking.ticketsCount,
-          price: booking.ticketAmount,
-          ticketType: booking.ticketDetails?.type || "General"
-        },
-        user: booking.user
-      }
-    );
-
-    // Create notifications
-    await Email.create([
-      {
-        recipient: booking.user._id,
-        message: `Booking confirmed for ${booking.event.name}`,
-        type: "payment"
-      },
-      {
-        recipient: booking.event.organizer._id,
-        message: `New booking from ${booking.user.name}`,
-        type: "booking"
-      }
+    const [emails, total] = await Promise.all([
+      Email.find({ recipient: req.userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .populate('recipient', 'name email')
+        .populate({
+          path: 'booking',
+          select: 'event',
+          populate: {
+            path: 'event',
+            select: 'name'
+          }
+        }),
+      Email.countDocuments({ recipient: req.userId })
     ]);
 
-    res.json({ success: true });
-
-  } catch (error) {
-    console.error("Email notification error:", error);
-    res.status(500).json({ 
-      error: "Failed to send notifications",
-      code: "EMAIL_NOTIFICATION_FAILED"
-    });
-  }
-});
-
-// Resend email notification
-router.post("/resend/:notificationId", verifyToken, async (req, res) => {
-  try {
-    const notification = await Email.findById(req.params.notificationId)
-      .populate("recipient", "email");
-
-    if (!notification) {
-      return res.status(404).json({ error: "Notification not found" });
-    }
-
-    // Implementation depends on your notification types
-    // This is a generic example - you'll need to adjust
-    const emailContent = {
-      subject: "Reminder: " + notification.message,
-      text: notification.message
-    };
-
-    await sendEmail(
-      { email: notification.recipient.email },
-      "genericNotification",
-      { message: notification.message }
-    );
-
-    res.json({ success: true });
-
-  } catch (error) {
-    console.error("Resend error:", error);
-    res.status(500).json({ error: "Failed to resend notification" });
-  }
-}); 
-
-
-// GET /api/email-notifications/my
-router.get('/my', verifyToken, async (req, res) => {
-  try {
-    const notifications = await Email.find({ recipient: req.userId })
-      .sort({ createdAt: -1 });
-      
     res.json({
       success: true,
-      data: notifications.map(n => ({
-        _id: n._id,
-        subject: `Booking Notification - ${n.type}`,
-        message: n.message,
-        read: n.read,
-        createdAt: n.createdAt
-      }))
+      data: emails.map(email => ({
+        id: email._id,
+        subject: email.subject || `Booking Update - ${email.type}`,
+        message: email.message,
+        read: email.read,
+        createdAt: email.createdAt,
+        bookingId: email.booking?._id,
+        eventName: email.booking?.event?.name
+      })),
+      pagination: {
+        total,
+        pages: Math.ceil(total / limit),
+        current: page
+      }
     });
   } catch (err) {
-    res.status(500).json({
+    console.error('Email retrieval error:', err);
+    res.status(500).json({ 
       success: false,
-      error: err.message
+      error: 'Failed to retrieve emails',
+      code: 'EMAIL_RETRIEVAL_FAILED'
     });
   }
 });
 
-// PATCH /api/emails/:id/read
+// Secure email update with ownership check
 router.patch('/:id/read', verifyToken, async (req, res) => {
   try {
-    const email = await Email.findByIdAndUpdate(
-      req.params.id,
+    const email = await Email.findOneAndUpdate(
+      { 
+        _id: req.params.id,
+        recipient: req.userId 
+      },
       { $set: { read: true } },
-      { new: true }
+      { 
+        new: true,
+        runValidators: true 
+      }
     );
-    res.json({ success: true, data: email });
+
+    if (!email) {
+      return res.status(404).json({
+        success: false,
+        error: 'Email not found or unauthorized',
+        code: 'EMAIL_NOT_FOUND'
+      });
+    }
+
+    res.json({ 
+      success: true,
+      data: {
+        id: email._id,
+        read: email.read
+      }
+    });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    console.error('Mark as read error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to update email status',
+      code: 'EMAIL_UPDATE_FAILED'
+    });
   }
 });
 
-// DELETE /api/emails/:id
+// Secure deletion with ownership verification
 router.delete('/:id', verifyToken, async (req, res) => {
   try {
-    await Email.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
+    const email = await Email.findOneAndDelete({
+      _id: req.params.id,
+      recipient: req.userId
+    });
+
+    if (!email) {
+      return res.status(404).json({
+        success: false,
+        error: 'Email not found or unauthorized',
+        code: 'EMAIL_NOT_FOUND'
+      });
+    }
+
+    res.json({ 
+      success: true,
+      data: {
+        id: email._id,
+        deleted: true
+      }
+    });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    console.error('Delete email error:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to delete email',
+      code: 'EMAIL_DELETION_FAILED'
+    });
   }
 });
 
-
 export default router;
+
 

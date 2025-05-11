@@ -8,7 +8,7 @@ import BackButton from "../components/BackButton.jsx";
 
 import '../eMailVerification.css';
 
-
+ 
   const CreateEventModal = ({ isOpen, onClose }) => {
 
   const [name, setName] = useState("");

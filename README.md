@@ -19,7 +19,7 @@ type-> clear in command Line .
 inside json file insert: "type":"module" below description.
 
 // next install express and nodemon .
-npm i express nodemon bcrypt cors jsonwebtoken mongoose cookie-parser cron dotenv socket.io
+npm i express nodemon bcryptjs cors jsonwebtoken mongoose cookie-parser cron dotenv socket.io
 
     Main :"backend/index.js"
 inside json file  under Script remove the following:

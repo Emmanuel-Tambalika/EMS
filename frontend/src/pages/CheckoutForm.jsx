@@ -77,7 +77,7 @@ const CheckoutForm = ({ venueId }) => {
         setError('Payment succeeded, but notification failed');
       }
 
-      setPaymentStatus('succeeded');
+        setPaymentStatus('succeeded');
       setTimeout(() => navigate('/myVenues'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Payment failed');

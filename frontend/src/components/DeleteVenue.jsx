@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useAuthStore } from "../store/authStore";
 
-const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
+const DeleteVenue = ({ isOpen, onClose, venue, onDeleteSuccess }) => {
     const { enqueueSnackbar } = useSnackbar();
     const { user } = useAuthStore();
     const [isDeleting, setIsDeleting] = useState(false);
 
        const handleDelete = async () => {
         // First-level null check
-        if (!event) {
-            enqueueSnackbar('No event selected', {
+        if (!venue) {
+            enqueueSnackbar('No venue selected', {
                 variant: 'error',
                 anchorOrigin: { vertical: 'top', horizontal: 'right' }
             });
@@ -18,8 +18,8 @@ const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
         }
 
         // Second-level ID verification
-        if (!event._id) {
-            enqueueSnackbar('Invalid event ID', {
+        if (!venue._id) {
+            enqueueSnackbar('Invalid venue ID', {
                 variant: 'error',
                 anchorOrigin: { vertical: 'top', horizontal: 'right' }
             });
@@ -28,7 +28,7 @@ const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
 
         setIsDeleting(true);
         try {
-            const response = await fetch(`http://localhost:5001/api/events/${event._id}`, {
+            const response = await fetch(`http://localhost:5001/api/venues/${venue._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
     };
 
     // Early return pattern for cleaner code
-    if (!isOpen || !event) return null;
+    if (!isOpen || !venue) return null;
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -78,13 +78,13 @@ const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
 
                 <div className="event-details">
                     <p className="event-detail">
-                        <strong>Event:</strong> {event.name || 'N/A'}
+                        <strong>Venue:</strong> {venue.name || 'N/A'}
                     </p>
                     <p className="event-detail">
-                        <strong>Venue:</strong> {event.venue || 'N/A'}
+                        <strong>Capacity:</strong> {venue.capacity || 'N/A'}
                     </p>
                     <p className="event-detail">
-                        <strong>Date:</strong> {event.date ? new Date(event.date).toLocaleDateString() : 'N/A'}
+                    <strong>City:</strong> {venue.city || 'N/A'}
                     </p>
                 </div>
 
@@ -112,13 +112,13 @@ const DeleteEvent = ({ isOpen, onClose, event, onDeleteSuccess }) => {
                                 <span className="spinner" aria-hidden="true" />
                                 Deleting...
                             </>
-                        ) : 'Delete Event'}
+                        ) : 'Delete Venue'}
                     </button>
                 </div>
             </div>
         </div>
     );
 };
-
-export default DeleteEvent;
+      
+export default DeleteVenue;
 

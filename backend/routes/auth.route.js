@@ -4,6 +4,7 @@ import {
 	logout, 
 	signup, 
 	checkAuth,
+	
 } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 

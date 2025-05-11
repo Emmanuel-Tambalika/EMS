@@ -16,13 +16,13 @@ body{
     color:rgb(57, 18, 201);
 
 }
-
+ 
 .logo-img{
-    height:70px;
+    height:70px; 
   width: 80px;
   border-radius:none;
   display: inline;
-  
+
 }
 
 .landing-h1, .logo-img{
@@ -122,13 +122,13 @@ nav, Link{
 .role1{
     font-size: large;
     font-weight:bold;
-    color: rgb(181, 219, 86);
+    color: rgb(33, 82, 216);
 }
 
 .role2{
     font-size: large;
     font-weight:bold;
-    color: rgb(152, 167, 235);
+    color: rgb(1, 4, 14);
 }
 
 /* Events Page */ 

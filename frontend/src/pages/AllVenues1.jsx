@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useGetUserID } from "../hooks/useGetUserID";
 import { motion } from "framer-motion";
-import { MdEventAvailable, MdTimer , MdLocationOn, MdHome, MdMail, MdPerson } from "react-icons/md";
-import {Link, useLocation , useNavigate } from 'react-router-dom';
-import react from '../assets/react.svg';
-
+import { MdEventAvailable, MdTimer } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 const CITY_OPTIONS = [
   "Mutare", "Harare", "Bulawayo", "Chegutu", "Hwange", "Kadoma",
@@ -17,21 +15,8 @@ const MAX_CAPACITY = 1000;
 const MIN_PRICE = 0;
 const MAX_PRICE = 10000;
 
-const AllVenues = () => {
-     const location = useLocation(); 
-     
-          const isActive = (path) => {
-         return location.pathname === path;  
-       };
-     
-       const navLinks = [
-         { path: "/EventsPage", icon: MdHome, label: "Home" },
-         { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
-         { path: "/my-Venues", icon: MdLocationOn, label: " Booked Venues" },
-         { path: "/MailPage", icon: MdMail, label: "Mail" },
-         { path: "/profilePage", icon: MdPerson, label: "Profile" }
-       ];
-
+const AllVenues1 = () => {
+  
   const [venues, setVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,7 +41,7 @@ const AllVenues = () => {
         { withCredentials: true }
       );
       fetchVenues();
-            navigate('/my-venues')
+            navigate('/venues')
     } catch (err) {
        setError(err.response?.data?.message || "Booking failed");
     }
@@ -206,53 +191,18 @@ const AllVenues = () => {
       }
     }
   };
- 
+
   return (
-    <div className="flex min-h-screen">
-
-
-       {/* Sidebar */}
-            <div className="fixed w-56 h-full bg-white shadow-lg z-10">
-              <div className="flex items-center p-4 border-b border-gray-200">
-                <img src={react} alt="Company Logo" className="w-8 h-8 mr-3" />
-                <h1 className="text-xl font-bold text-blue-600">EMS</h1>
-              </div>
-              
-              <nav className="p-2">
-                <ul className="space-y-1">
-                  {navLinks.map((link) => {
-                    const Icon = link.icon;
-                    return (
-                      <li key={link.path}>
-                        <Link
-                          to={link.path}
-                          className={`flex items-center p-3 rounded-lg transition-colors ${
-                            isActive(link.path)
-                              ? 'bg-blue-50 text-blue-600'
-                              : 'hover:bg-gray-100 hover:text-blue-600 text-gray-600'
-                          }`}
-                        >
-                          <Icon className={`text-2xl mr-3 ${
-                            isActive(link.path) ? 'text-blue-500' : 'text-gray-500'
-                          }`} />
-                          <span>{link.label}</span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-            </div>
-      
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       )}
       
-      <div className="ml-56 flex-1 p-6">
+      <div className="max-w-6xl mx-auto">
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}  
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-10"
         >
@@ -446,5 +396,5 @@ const AllVenues = () => {
   );
 };
 
-export default AllVenues;
+export default AllVenues1;
 

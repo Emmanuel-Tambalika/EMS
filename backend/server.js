@@ -9,14 +9,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import authRoutes from "./routes/auth.route.js";
-import eventRoutes from "./routes/events.route.js";
+import eventRoutes from "./routes/events.route.js"; 
 import venueRoutes from "./routes/venues.route.js";
 import bookingsRouter from "./routes/bookings.js";
 import paymentsRouter from './routes/payments.js';
 import notificationsRouter from "./routes/notifications.route.js";
-import EmailRouter from "./routes/Email.routes.js"
+import emailRouter from "./routes/Email.routes.js"
+
+  
+
 const app = express();
 const PORT = process.env.PORT || 5001;
+
 
 // Middleware
 app.use(cors({ 
@@ -30,10 +34,10 @@ app.use(cookieParser());
 app.use("/api/Log-In", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/venues", venueRoutes);
-app.use("/api/bookings", bookingsRouter);  // ✅ Correctly mounted bookings router
+app.use("/api/bookings", bookingsRouter);  
 app.use("/api/payments", paymentsRouter);
 app.use("/api/notifications", notificationsRouter);
-app.use("api/emails",EmailRouter);
+app.use("api/emails",emailRouter);
  
 // Error Handling Middleware
 app.use((err, req, res, next) => {
@@ -62,7 +66,7 @@ db.on('error', (err) => {
 });
 
 db.once('open', () => {
-  console.log('Connected to MongoDB');
+  console.log('Connected to MongoDB');   
 });
 
 // Production Configuration

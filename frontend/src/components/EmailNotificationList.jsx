@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { MdEmail, MdHome, MdMarkEmailRead, MdDelete, MdLocationOn, MdMail, MdPerson } from 'react-icons/md';
+import { MdEmail, MdHome, MdMarkEmailRead, MdDelete, MdLocationOn, MdMail, MdPerson ,MdLocationPin } from 'react-icons/md';
 import react from '../assets/react.svg';
 
 const EmailNotificationList = () => {
@@ -14,11 +14,13 @@ const EmailNotificationList = () => {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-     { path: "/EventsPage", icon: MdHome, label: "Home" },
-    { path: "/Venues", icon: MdLocationOn, label: "Venues" },
-    { path: "/MailPage", icon: MdMail, label: "Mail" },
-    { path: "/profilePage", icon: MdPerson, label: "Profile" }
+   { path: "/EventsPage", icon: MdHome, label: "Home" },
+   { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
+   { path: "/my-Venues", icon: MdLocationPin, label: " Booked Venues" },
+   { path: "/MailPage", icon: MdMail, label: "Mail" },
+   { path: "/profilePage", icon: MdPerson, label: "Profile" }
   ];
+  
 
   const fetchEmails = async () => {
     setLoading(true);

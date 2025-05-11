@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation ,Link} from "react-router-dom";
 import { motion } from "framer-motion";
-import { MdPayment, MdEmail, MdCancel } from "react-icons/md";
+import { MdPayment, MdEmail, MdCancel  , MdBook, MdMail, MdPerson, MdHome } from "react-icons/md";
+import react from '../assets/react.svg';
 
 const MyBookings = () => {
+
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
+
+ const navLinks = [
+      { path: "/AttendeePage", icon: MdHome, label: "Home" },
+      { path: "/my-Bookings", icon: MdBook, label: "My Bookings" },
+      { path: "/emails", icon: MdMail, label: "Mail" },
+      { path: "/profilePage", icon: MdPerson, label: "Profile" }
+   ];  
+
+
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -155,22 +170,58 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
+    <div className="flex min-h-screen">
+
+ {/* Sidebar */}
+ <div className="fixed w-56 h-full bg-white shadow-lg z-10">
+        <div className="flex items-center p-4 border-b border-gray-200">
+          <img src={react} alt="Company Logo" className="w-8 h-8 mr-3" />
+          <h1 className="text-xl font-bold text-blue-600">EMS</h1>
+        </div>
+        
+        <nav className="p-2">
+          <ul className="space-y-1">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className={`flex items-center p-3 rounded-lg transition-colors ${
+                      isActive(link.path)
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'hover:bg-gray-100 hover:text-blue-600 text-gray-600'
+                    }`}
+                  >
+                    <Icon className={`text-2xl mr-3 ${
+                      isActive(link.path) ? 'text-blue-500' : 'text-gray-500'
+                    }`} />
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+
+
+
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       )}
       
-      <div className="max-w-6xl mx-auto">
+      <div className=" ml-56 max-w-6xl mx-auto p-3">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-10"
         >
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">My Bookings</h2>
-          <p className="text-gray-600">Manage your event bookings and payments</p>
+          <h2 className=" ml-36 text-3xl font-bold text-gray-800 mb-2">My Bookings</h2>
+          <p className="ml-46 text-gray-600">Manage your event bookings and payments</p>
         </motion.div>
 
         {error && (
@@ -193,7 +244,7 @@ const MyBookings = () => {
             <p className="text-gray-400 mt-2">Your upcoming events will appear here</p>
           </motion.div>
         ) : (
-          <ul className="space-y-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {bookings.map((booking) => {
               if (!booking.event) {
                 return (
@@ -239,7 +290,7 @@ const MyBookings = () => {
                         <h3 className="text-xl font-bold text-gray-800 mb-2">
                           {event.name || "Unnamed Event"}
                         </h3>
-                        <span className="text-sm text-gray-500">
+                        <span className=" ml-10 text-sm text-gray-500">
                           {event.date ? new Date(event.date).toLocaleDateString() : "N/A"}
                         </span>
                       </div>
@@ -309,7 +360,7 @@ const MyBookings = () => {
                               ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
                               : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                         } ${deletingId === booking._id ? 'opacity-75' : ''}`}
-                      >
+                      >  
                         <MdCancel className="text-lg " />
                         {deletingId === booking._id ? 'Deleting...' : 
                           isExpired ? 'Delete Expired' : 'Booking Expired (Delete)'}

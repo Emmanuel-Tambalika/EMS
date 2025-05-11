@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const router = express.Router();
+  const router = express.Router();
 
 // Email Configuration with App Password
 const transporter = nodemailer.createTransport({

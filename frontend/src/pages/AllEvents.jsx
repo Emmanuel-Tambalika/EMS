@@ -12,6 +12,7 @@ const AllEvents = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -100,7 +101,7 @@ const AllEvents = () => {
                         <p className="text-lg text-blue-600">Loading events...</p>
                     </div>
                 )}
-
+       
                 {error && (
                     <div className="text-center py-8 bg-red-50 rounded-xl mb-6">
                         <p className="text-lg text-red-600">{error}</p>
@@ -207,7 +208,7 @@ const AllEvents = () => {
                 event={selectedEvent}
                 onDeleteSuccess={handleDeleteSuccess}
             />
-        </div>
+        </div>  
     );
 };
 

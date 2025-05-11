@@ -165,6 +165,8 @@ const CheckoutPage = () => {
             onPaymentSuccess={(paymentIntent) => {
               console.log('Payment completed:', paymentIntent);
               // Optional: Add any post-payment logic here
+
+              
             }}
             venueId={venueId}
           />

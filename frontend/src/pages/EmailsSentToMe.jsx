@@ -1,34 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { MdEmail, MdHome, MdMarkEmailRead, MdDelete, MdLocationOn,MdBook, MdMail, MdPerson } from 'react-icons/md';
+import { MdEmail, MdHome, MdMarkEmailRead, MdDelete, MdBook, MdMail, MdPerson } from 'react-icons/md';
 import react from '../assets/react.svg';
 
 const EmailsSentToMe = () => {
   const [emails, setEmails] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname === path;   
 
   const navLinks = [
-     { path: "/AttendeePage", icon: MdHome, label: "Home" },
-     { path: "/my-Bookings", icon: MdBook, label: "My Bookings" },
+    { path: "/AttendeePage", icon: MdHome, label: "Home" },
+    { path: "/my-Bookings", icon: MdBook, label: "My Bookings" },
     { path: "/emails", icon: MdMail, label: "Mail" },
     { path: "/profilePage", icon: MdPerson, label: "Profile" }
   ];
 
   const fetchEmails = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true); 
+    setError(null);   
     try {
       const { data } = await axios.get(
-        'http://localhost:5001/api/my',
+        'http://localhost:5001/api/emails',
         { withCredentials: true }
       );
-      setEmails(data.data || []); // Ensure array format
+      
+      // Handle both array and { data: [...] } responses
+      const emailsArray = Array.isArray(data) ? data : data?.data || [];
+      setEmails(emailsArray.map(email => ({
+        ...email,
+        // Ensure default values if backend doesn't provide subject
+        subject: email.subject || `Notification: ${email.type || 'Update'}`,
+        // Format message if needed
+        message: email.message || 'No content available'
+      })));
     } catch (err) {
       setError(err.response?.data?.error || err.message);
     } finally {
@@ -43,9 +52,15 @@ const EmailsSentToMe = () => {
         {},
         { withCredentials: true }
       );
-      fetchEmails();
+      setEmails(emails.map(email => 
+        email._id === id ? { ...email, read: true } : email
+      ));
+      if (selectedEmail?._id === id) {
+        setSelectedEmail({ ...selectedEmail, read: true });
+      }
     } catch (err) {
       console.error('Mark as read failed:', err);
+      setError(err.response?.data?.error || 'Failed to mark as read');
     }
   };
 
@@ -55,10 +70,11 @@ const EmailsSentToMe = () => {
         `http://localhost:5001/api/emails/${id}`,
         { withCredentials: true }
       );
-      fetchEmails();
+      setEmails(emails.filter(email => email._id !== id));
       if (selectedEmail?._id === id) setSelectedEmail(null);
     } catch (err) {
       console.error('Delete failed:', err);
+      setError(err.response?.data?.error || 'Failed to delete email');
     }
   };
 
@@ -124,6 +140,7 @@ const EmailsSentToMe = () => {
                               markAsRead(email._id);
                             }}
                             className="text-gray-400 hover:text-blue-500"
+                            aria-label="Mark as read"
                           >
                             <MdMarkEmailRead />
                           </button>
@@ -133,6 +150,7 @@ const EmailsSentToMe = () => {
                               deleteEmail(email._id);
                             }}
                             className="text-gray-400 hover:text-red-500"
+                            aria-label="Delete email"
                           >
                             <MdDelete />
                           </button>
@@ -144,6 +162,11 @@ const EmailsSentToMe = () => {
                       <p className="text-xs text-gray-400 mt-1">
                         {new Date(email.createdAt).toLocaleString()}
                       </p>
+                      {email.eventName && (
+                        <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded">
+                          {email.eventName}
+                        </span>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -178,6 +201,16 @@ const EmailsSentToMe = () => {
                     <p className="text-gray-600 mb-2">
                       <strong>Date:</strong> {new Date(selectedEmail.createdAt).toLocaleString()}
                     </p>
+                    {selectedEmail.bookingId && (
+                      <p className="text-gray-600 mb-2">
+                        <strong>Booking ID:</strong> {selectedEmail.bookingId}
+                      </p>
+                    )}
+                    {selectedEmail.eventName && (
+                      <p className="text-gray-600 mb-2">
+                        <strong>Event:</strong> {selectedEmail.eventName}
+                      </p>
+                    )}
                   </div>
 
                   <div className="prose max-w-none">
@@ -235,4 +268,4 @@ const Sidebar = ({ navLinks, isActive }) => (
   </div>
 );
 
-export default  EmailsSentToMe ;
+export default EmailsSentToMe;

@@ -10,18 +10,23 @@ import react from '../assets/react.svg';
 const Profile = () => {
 
   const { user, logout } = useAuthStore();
+
+	const handleLogout = () => {
+		logout();
+	};
   const location = useLocation();
 
-  const handleLogout = () => logout();
+
 
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-	{ path: "/EventsPage", icon: MdHome, label: "Home" },
-    { path: "/Venues", icon: MdLocationOn, label: "Venues" },
-    { path: "/MailPage", icon: MdMail, label: "Mail" },
-    { path: "/profilePage", icon: MdPerson, label: "Profile" }
-  ];
+           { path: "/EventsPage", icon: MdHome, label: "Home" },
+           { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
+           { path: "/my-Venues", icon: MdLocationOn, label: " Booked Venues" },
+           { path: "/MailPage", icon: MdMail, label: "Mail" },
+           { path: "/profilePage", icon: MdPerson, label: "Profile" }
+         ];
 
   return (
     <div className="flex min-h-screen">
@@ -78,7 +83,7 @@ const Profile = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h3 className="text-xl font-semibold text-green-400 mb-3">Profile Information</h3>
+              <h3 className="text-xl font-semibold text-green-400 mb-3">Organizer Details</h3>
               <p className="text-gray-300">Name: {user.name}</p>
               <p className="text-gray-300">Email: {user.email}</p>
             </motion.div>

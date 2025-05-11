@@ -34,7 +34,7 @@ const eventSchema = new mongoose.Schema(
         },
         venue: {
             type: String,
-            required: true,
+            required: true,  
         },
 
         //Show All Tickets Available On Event Creation Number Is Subject To change
@@ -52,11 +52,7 @@ const eventSchema = new mongoose.Schema(
           userOwner: {
             type: mongoose.Schema.Types.ObjectId, ref: "User",
         },
-        organizer: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
-          },
+       
 
 
     },

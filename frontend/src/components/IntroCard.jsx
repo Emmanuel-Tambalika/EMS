@@ -3,7 +3,7 @@ import React from 'react'
 const IntroCard = (props) => {
 
 
-  return (
+     return (
     <div className='Intro-Card'>
 
       <h2 className='Welcome-heading'>{props.heading}</h2>

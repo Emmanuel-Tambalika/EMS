@@ -4,7 +4,7 @@ import Calendar from 'react-calendar';
 import { MdBook, MdMail, MdPerson, MdHome } from 'react-icons/md';
 import { useAuthStore } from "../store/authStore";
 import BookingModal from "../components/BookingModal.jsx";
-import 'react-calendar/dist/Calendar.css';
+ import 'react-calendar/dist/Calendar.css';
 import react from '../assets/react.svg';
 
 const AttendeeHome = () => {
@@ -15,18 +15,19 @@ const AttendeeHome = () => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [expandedDescriptions, setExpandedDescriptions] = useState({});
+    
     const location = useLocation();
 
     const isActive = (path) => location.pathname === path;
 
-    const navLinks = [
+   const navLinks = [
         { path: "/AttendeePage", icon: MdHome, label: "Home" },
         { path: "/my-Bookings", icon: MdBook, label: "My Bookings" },
         { path: "/emails", icon: MdMail, label: "Mail" },
         { path: "/profilePage", icon: MdPerson, label: "Profile" }
-    ];
+     ];  
 
-    const formatDateToLocalISO = (date) => {
+     const formatDateToLocalISO = (date) => {
         if (!date) return null;
         const offset = date.getTimezoneOffset() * 60000;
         return new Date(date - offset).toISOString().split('T')[0];

@@ -7,13 +7,13 @@ import ChooseAccount from './ChooseAccount.jsx';
 
 const LandingPage = () => {
 
-  return (
+  return (     
 
     <div >
        
        <div>
-        <h1 className='landing-h1'><img className='logo-img' 
-        src={react} alt="Company-logo" />EMS</h1>
+        <h1 className='landing-h1'>
+          <img className='logo-img'  src={react} alt="Company-logo"/> EMS</h1>
         </div>
 
         <nav className='Nav-bar'>

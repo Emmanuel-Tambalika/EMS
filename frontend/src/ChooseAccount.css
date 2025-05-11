@@ -12,7 +12,7 @@
     margin-top: -30%;
     max-width: 750px;
 
-}
+}  
 
 .person_div{
 margin-top: 5px;
@@ -27,22 +27,22 @@ border-width: 2px;
 
 .person_div1{
 
-margin-top: -100px;
+margin-top: -180px;
 margin-left: 250px;
 border-radius: 10%;
 background-color: rgb(243, 234, 174);
 max-width: 200px;
 border-color: rgb(14, 235, 7);
-border-width: 2px;
+border-width: 2px; 
 }
 .person_div2{
-  margin-top: -90px;
+  margin-top: -180px;
   margin-left: 500px;
   border-radius: 10%;
   background-color: rgb(123, 235, 123);
   max-width: 200px;
   border-color: rgb(2, 2, 2);
-border-width: 2px;
+  border-width: 2px;
   }
   
 .profile-label{

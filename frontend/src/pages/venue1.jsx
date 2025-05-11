@@ -1,27 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MdLocationOn, MdHome, MdMail, MdPerson } from 'react-icons/md';
+import { MdInbox,MdHome, MdOutlineDelete, MdOutlineSearch, MdLocationOn, MdMail, MdPerson } from 'react-icons/md';
 import react from '../assets/react.svg';
-import AllEvents from './AllEvents.jsx';
+import AllVenues1 from './AllVenues1';
+import AllVenues from './AllVenues';
+import MyVenues from './MyVenues';
+import CheckoutPage from './CheckoutPage';
 
-const Events = () => {
-  const location = useLocation(); 
+const Venue1 = () => {
+  const [showType, setShowType] = useState('View2');
+  const location = useLocation();
 
-     const isActive = (path) => {
-    return location.pathname === path;
-  };
+  const isActive = (path) => location.pathname === path;
 
   const navLinks = [
     { path: "/EventsPage", icon: MdHome, label: "Home" },
-    { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
-    { path: "/my-Venues", icon: MdLocationOn, label: " Booked Venues" },
+    { path: "/Venues", icon: MdLocationOn, label: "Venues" },
     { path: "/MailPage", icon: MdMail, label: "Mail" },
     { path: "/profilePage", icon: MdPerson, label: "Profile" }
   ];
-  
+
   return (
     <div className="flex min-h-screen">
-      
       {/* Sidebar */}
       <div className="fixed w-56 h-full bg-white shadow-lg z-10">
         <div className="flex items-center p-4 border-b border-gray-200">
@@ -55,14 +55,40 @@ const Events = () => {
         </nav>
       </div>
 
-       {/* Main Content */}
+      {/* Main Content */}
       <div className="ml-56 flex-1 p-6">
+        {/* View Toggle Buttons */}
+        <div className="flex justify-center items-center gap-4 mb-8">
+          <button
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              showType === 'View1'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            onClick={() => setShowType('View1')}
+          >
+            All Venues
+          </button>
+          
+          <button
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              showType === 'View2'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            onClick={() => setShowType('View2')}
+          >
+             Booked Venues 
+          </button>
+        </div>
+
+        {/* Content Area */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AllEvents />
+          {showType === 'View1' ? <AllVenues1 /> : <MyVenues />}
         </div>
       </div>
     </div>
   );
 };
 
-export default Events;
+export default Venue1;
