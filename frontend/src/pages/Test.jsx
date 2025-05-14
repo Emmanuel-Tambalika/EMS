@@ -2,44 +2,67 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useGetUserID } from "../hooks/useGetUserID";
 import { motion } from "framer-motion";
-import { MdEventAvailable, MdTimer } from "react-icons/md";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { MdEventAvailable, MdTimer, MdLocationOn, MdHome, MdMail, MdPerson } from "react-icons/md";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import react from '../assets/react.svg';
+import VenueManage from '../components/VenueManage.jsx'; // Import new modal
+
+const CITY_OPTIONS = [
+  "Mutare", "Harare", "Bulawayo", "Chegutu", "Hwange", "Kadoma",
+  "Masvingo", "Bindura", "Gweru", "Kariba", "BeitBridge", "Rusape", "Marondera", "Hwedza"
+];
+
+const MIN_CAPACITY = 0;
+const MAX_CAPACITY = 1000;
+const MIN_PRICE = 0;
+const MAX_PRICE = 10000;
 
 const AllVenues = () => {
+  const location = useLocation();
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  const navLinks = [
+    { path: "/EventsPage", icon: MdHome, label: "Home" },
+    { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
+    { path: "/my-Venues", icon: MdLocationOn, label: " Booked Venues" },
+    { path: "/MailPage", icon: MdMail, label: "Mail" },
+    { path: "/profilePage", icon: MdPerson, label: "Profile" }
+  ];
+
+
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const [venues, setVenues] = useState([]);
+  const [filteredVenues, setFilteredVenues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const userID = useGetUserID();
   const [unbookTimers, setUnbookTimers] = useState({});
- const navigate = useNavigate();
 
-
-  // Filter states
-   const [city, setCity] = useState('');
-   const [capacityRange, setCapacityRange] = useState([0, 1000]);
-   const [priceRange, setPriceRange] = useState([0, 10000]);
- 
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false); // New modal state
   
+    const [selectedVenue, setSelectedVenue] = useState(null);
+  const navigate = useNavigate();
+
+  const [filters, setFilters] = useState({
+    minCapacity: '',
+    maxCapacity: '',
+    minPrice: '',
+    maxPrice: '',
+    city: ''
+  });
+
   const saveVenue = async (venueID) => {
     try {
-      const response = await axios.put(
-        `http://localhost:5001/api/venues/${venueID}`,
+      await axios.put(
+        `http://localhost:5001/api/venues/${venueID}/book`,
         {},
         { withCredentials: true }
       );
-      
-      const updatedVenues = venues.map(venue => 
-        venue._id === venueID ? {
-          ...venue,
-          isBooked: true,
-          isPaymentPending: true,
-          venuePaidFor: false,
-          paymentTimeout: new Date(Date.now() + 2 * 60 * 1000)
-        } : venue
-      );
-      setVenues(updatedVenues);
-      navigate('/My-venues')
       fetchVenues();
+      navigate('/my-venues')
     } catch (err) {
       setError(err.response?.data?.message || "Booking failed");
     }
@@ -52,7 +75,7 @@ const AllVenues = () => {
         "http://localhost:5001/api/venues",
         { withCredentials: true }
       );
-      
+
       const newTimers = {};
       response.data.forEach(venue => {
         if (venue.venuePaidFor && venue.bookedAt) {
@@ -64,7 +87,6 @@ const AllVenues = () => {
         }
       });
       setUnbookTimers(newTimers);
-      
       setVenues(response.data);
     } catch (err) {
       setError(err.message || "Failed to fetch venues");
@@ -74,44 +96,13 @@ const AllVenues = () => {
   };
 
 
-   // Client-side filtering
-   const filteredVenues = venues.filter(venue => {
-    const matchesCity = city
-      ? venue.city.toLowerCase().includes(city.toLowerCase())
-      : true;
-    const matchesCapacity =
-      venue.capacity >= capacityRange[0] &&
-      venue.capacity <= capacityRange[1];
-    const matchesPrice =
-      venue.price >= priceRange[0] &&
-      venue.price <= priceRange[1];
-    return matchesCity && matchesCapacity && matchesPrice;
-  });
-
-
-  const handleUnbook = async (venueID) => {
-    try {
-      await axios.delete(
-        `http://localhost:5001/api/venues/${venueID}`,
-        { withCredentials: true }
-      );
-      setUnbookTimers(prev => {
-        const newTimers = {...prev};
-        delete newTimers[venueID];
-        return newTimers;
-      });
-      fetchVenues();
-    } catch (err) {
-      console.error("Unbooking Error:", err);
-    }
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setUnbookTimers(prev => {
         const updated = {};
         let needsUpdate = false;
-        
+
         Object.entries(prev).forEach(([id, timeLeft]) => {
           const newTime = timeLeft - 1000;
           if (newTime <= 0) {
@@ -121,7 +112,7 @@ const AllVenues = () => {
             updated[id] = newTime;
           }
         });
-        
+
         return needsUpdate ? updated : prev;
       });
     }, 1000);
@@ -148,6 +139,44 @@ const AllVenues = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    let result = venues;
+    if (filters.minCapacity) {
+      result = result.filter(v => v.capacity >= Number(filters.minCapacity));
+    }
+    if (filters.maxCapacity) {
+      result = result.filter(v => v.capacity <= Number(filters.maxCapacity));
+    }
+    if (filters.minPrice) {
+      result = result.filter(v => v.price >= Number(filters.minPrice));
+    }
+    if (filters.maxPrice) {
+      result = result.filter(v => v.price <= Number(filters.maxPrice));
+    }
+    if (filters.city) {
+      result = result.filter(v => v.city.toLowerCase().includes(filters.city.toLowerCase()));
+    }
+    setFilteredVenues(result);
+  }, [venues, filters]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      minCapacity: '',
+      maxCapacity: '',
+      minPrice: '',
+      maxPrice: '',
+      city: ''
+    });
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -169,16 +198,57 @@ const AllVenues = () => {
     }
   };
 
+  const toggleDescription = (venueId) => {
+    setExpandedDescriptions(prev => ({
+      ...prev,
+      [venueId]: !prev[venueId]
+    }));
+  };
+
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
+    <div className="flex min-h-screen">
+
+
+      {/* Sidebar */}
+      <div className="fixed w-56 h-full bg-white shadow-lg z-10">
+        <div className="flex items-center p-4 border-b border-gray-200">
+          <img src={react} alt="Company Logo" className="w-8 h-8 mr-3" />
+          <h1 className="text-xl font-bold text-blue-600">EMS</h1>
+        </div>
+
+        <nav className="p-2">
+          <ul className="space-y-1">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className={`flex items-center p-3 rounded-lg transition-colors ${isActive(link.path)
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'hover:bg-gray-100 hover:text-blue-600 text-gray-600'
+                      }`}
+                  >
+                    <Icon className={`text-2xl mr-3 ${isActive(link.path) ? 'text-blue-500' : 'text-gray-500'
+                      }`} />
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       )}
-      
-      <div className="max-w-6xl mx-auto">
-        <motion.div 
+
+      <div className="ml-56 flex-1 p-6">
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-10"
@@ -186,64 +256,6 @@ const AllVenues = () => {
           <h2 className="text-3xl font-bold text-gray-800 mb-2">Available Venues</h2>
           <p className="text-gray-600">Find and book your perfect event space</p>
         </motion.div>
-
-
-         {/* Filter Controls */}
-         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Filter Venues</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-              <input
-                type="text"
-                placeholder="Any city"
-                value={city}
-                onChange={e => setCity(e.target.value)}
-                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Capacity Range</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={capacityRange[0]}
-                  onChange={e => setCapacityRange([Number(e.target.value), capacityRange[1]])}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={capacityRange[1]}
-                  onChange={e => setCapacityRange([capacityRange[0], Number(e.target.value)])}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={priceRange[0]}
-                  onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={priceRange[1]}
-                  onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
 
         {error && (
           <motion.div
@@ -255,114 +267,216 @@ const AllVenues = () => {
           </motion.div>
         )}
 
+        {/* Improved Filter Controls */}
+        <motion.div
+          className="bg-white p-6 rounded-xl shadow-md mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Capacity</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={MIN_CAPACITY}
+                  max={filters.maxCapacity || MAX_CAPACITY}
+                  name="minCapacity"
+                  placeholder="Min"
+                  className="w-full p-2 border rounded"
+                  value={filters.minCapacity}
+                  onChange={handleFilterChange}
+                />
+                <span className="text-gray-400">—</span>
+                <input
+                  type="number"
+                  min={filters.minCapacity || MIN_CAPACITY}
+                  max={MAX_CAPACITY}
+                  name="maxCapacity"
+                  placeholder="Max"
+                  className="w-full p-2 border rounded"
+                  value={filters.maxCapacity}
+                  onChange={handleFilterChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price ($/day)</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={MIN_PRICE}
+                  max={filters.maxPrice || MAX_PRICE}
+                  name="minPrice"
+                  placeholder="Min"
+                  className="w-full p-2 border rounded"
+                  value={filters.minPrice}
+                  onChange={handleFilterChange}
+                />
+                <span className="text-gray-400">—</span>
+                <input
+                  type="number"
+                  min={filters.minPrice || MIN_PRICE}
+                  max={MAX_PRICE}
+                  name="maxPrice"
+                  placeholder="Max"
+                  className="w-full p-2 border rounded"
+                  value={filters.maxPrice}
+                  onChange={handleFilterChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+              <select
+                name="city"
+                className="w-full p-2 border rounded"
+                value={filters.city}
+                onChange={handleFilterChange}
+              >
+                <option value=""> Zimbabwe's Cities</option>
+                {CITY_OPTIONS.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-end">
+              <button
+                onClick={clearFilters}
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
         <motion.ul
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {venues.map((venue) => {
+          {filteredVenues.map((venue) => {
             const paymentTimeLeft = getPaymentTimeLeft(venue.paymentTimeout);
             const showPaymentTimer = venue.isPaymentPending && paymentTimeLeft > 0;
             const showUnbookTimer = venue.venuePaidFor && unbookTimers[venue._id] > 0;
             const isAvailable = !venue.isBooked && !venue.venuePaidFor;
 
             return (
-               <motion.li
-                              key={venue._id}
-                              variants={itemVariants}
-                              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-                              whileHover={{ y: -5 }}
-                            >
-                              <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                  <h3 className="text-xl font-bold text-gray-800 truncate">{venue.name}</h3>
-                                  <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                                    {venue.city}
-                                  </span>
-                                </div>
-                                <div className="space-y-2 mb-4">
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Capacity:</span>
-                                    <span className="font-semibold">{venue.capacity} people</span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Price:</span>
-                                    <span className="font-semibold">${venue.price}/day</span>
-                                  </div>
-                                </div>
-              
-                                {venue.isBooked ? (
-                                  <div className="mb-4">
-                                    {venue.isPaymentPending ? (
-                                      <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r mb-3">
-                                        <div className="flex items-center gap-2 text-blue-700">
-                                          <MdTimer className="text-lg" />
-                                          <span className="font-medium">
-                                            Pay in: {formatTime(paymentTimeLeft)}
-                                          </span>
-                                        </div>
-                                        <p className="text-sm text-blue-600 mt-1">Payment Pending</p>
-                                      </div>
-                                    ) : (
-                                      <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-3">
-                                        <div className="flex items-center gap-2 text-green-700">
-                                          <MdEventAvailable className="text-lg" />
-                                          <span className="font-medium">
-                                            {venue.venuePaidFor ? 'Booked' : 'Reserved'}
-                                          </span>
-                                        </div>
-                                        {showUnbookTimer && (
-                                          <p className="text-sm text-yellow-600 mt-1">
-                                            Available in: {formatTime(unbookTimers[venue._id])}
-                                          </p>
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  isAvailable && (
-                                    <motion.button
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                      onClick={() => saveVenue(venue._id)}
-                                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
-                                    >
-                                      Book Now
-                                    </motion.button>
-                                  )
-                                )}
-                              </div>
-                </motion.li>
+              <motion.li
+                key={venue._id}
+                variants={itemVariants}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ y: -5 }}
+              >
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-xl font-bold text-gray-800 truncate">{venue.name}</h3>
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                      {venue.city}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Capacity:</span>
+                      <span className="font-semibold">{venue.capacity} people</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Price:</span>
+                      <span className="font-semibold">${venue.price}/day</span>
+                    </div>
+                  </div>
+                  <div
+                    className={`text-gray-600 mb-1 transition-all duration-300 ${expandedDescriptions[venue._id]
+                      ? 'max-h-screen'
+                      : 'max-h-20 overflow-hidden'
+                      }`}
+                  >
+                    <p className='text-green-500 lg-50'>Description and Takeaways:</p> {venue.description}
+                  </div>
+
+                  {venue.description.length > 30 && (
+                    <button
+                      className="text-blue-600 hover:text-blue-800 font-medium text-sm mb-4"
+                      onClick={() => toggleDescription(venue._id)}
+                    >
+                      {expandedDescriptions[venue._id] ? 'Show Less' : 'Read More'}
+                    </button>
+                  )}
+              <button  
+              className=" mb-2 w-full bg-gradient-to-r from-green-600 t0-green-500 text-black py-2 px-4 rounded-lg hover:from-gray-300 hover:to-gray-700 transition-all"
+                onClick={() => {
+                        setSelectedVenue(venue);
+                        setIsManageModalOpen(true);
+                      }}
+              >
+                    Venue Calendar 
+              </button>
+
+
+
+                  {venue.isBooked ? (
+                    <div className="mb-4">
+                      {venue.isPaymentPending ? (
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r mb-3">
+                          <div className="flex items-center gap-2 text-blue-700">
+                            <MdTimer className="text-lg" />
+                            <span className="font-medium">
+                              Available For Booking  in: {formatTime(paymentTimeLeft)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-blue-600 mt-1 ml-12">Payment Pending</p>
+                        </div>
+                      ) : (
+                        <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-3">
+                          <div className="flex items-center gap-2 text-green-700">
+                            <MdEventAvailable className="text-lg" />
+                            <span className="font-medium">
+                              {venue.venuePaidFor ? 'Booked' : 'Reserved'}
+                            </span>
+                          </div>
+                          {showUnbookTimer && (
+                            <p className="text-sm text-yellow-600 mt-1">
+                              Available in: {formatTime(unbookTimers[venue._id])}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    isAvailable && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => saveVenue(venue._id)}
+                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
+                      >
+                        Book Now
+                      </motion.button>
+                    )
+                  )}
+                </div>
+              </motion.li>
             );
           })}
-
         </motion.ul>
 
-        {filteredVenues.length === 0 && !loading && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center py-12"
-                  >
-                    <h3 className="text-xl font-medium text-gray-600">
-                      No venues match your filters
-                    </h3>
-                    <button
-                      onClick={() => {
-                        setCity('');
-                        setCapacityRange([0, 1000]);
-                        setPriceRange([0, 10000]);
-                      }}
-                      className="mt-4 text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      Reset Filters
-                    </button>
-                  </motion.div>
-                )}
+        <VenueManage
+                  isOpen={isManageModalOpen}
+                  onClose={() => setIsManageModalOpen(false)}
+                  venue={selectedVenue}
+         />
       </div>
     </div>
   );
 };
 
 export default AllVenues;
+
+   

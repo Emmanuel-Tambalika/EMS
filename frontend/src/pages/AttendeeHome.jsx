@@ -101,16 +101,19 @@ const AttendeeHome = () => {
         <div className="flex min-h-screen">
             <Sidebar navLinks={navLinks} isActive={isActive} />
 
-            <div className="ml-56 flex-1 p-6">
-                {/* Calendar Section */}
-                <div className="flex flex-col items-center mr-40 mt-0 mb-2 space-y-6">
+                   {/* Calendar Section */}
+                <div className="flex flex-col items-center mr-10 mt-42 ml-70 mb-80 space-y-6">
                     <Calendar
                         onChange={handleDateChange}
                         value={selectedDate}
-                        className="border-none rounded-xl shadow-lg p-5 w-full bg-white"
+                        className="border-none rounded-xl shadow-lg p-0 w-full bg-white"
                         showWeekNumbers
                     />
                 </div>
+
+
+            <div className="mr-16 mt-60 flex-1 p-2">
+                
 
                 {/* Events Section */}
                 {loading && (

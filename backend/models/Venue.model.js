@@ -9,16 +9,20 @@ const venueSchema = new mongoose.Schema(
     city: { type: String },
     isPaymentPending: { type: Boolean, default: false },
     paymentTimeout: { type: Date },
-    isBooked: { type: Boolean, default: false },
-    bookedAt: { type: Date },
+    isBooked: { type: Boolean, default: false }, 
+    bookedAt: { type: Date },  
     venuePaidFor: { type: Boolean, default: false },
     paymentExpired: { type: Boolean, default: false },
-    userOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    userOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+
+    // New field to track booked dates explicitly
+    bookedDates: [{ type: String }], // store ISO date strings e.g. "2025-05-12"
   },
   { timestamps: true }
 );
 
 export const Venue = mongoose.model("Venue", venueSchema);
+
 
 
 

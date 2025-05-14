@@ -7,7 +7,7 @@ import { enqueueSnackbar } from 'notistack';
 import axios from 'axios';
 
 const stripePromise = loadStripe('pk_test_51HP6GwKzoxkKrQNZgUJcBm6yfEvua3cwpwPKJBySmzEl2xLznX5YFLecRlVvTJ2MQcHkZMFh1b4JsL6ceEN8mzVk00SLssI3ux');
-
+    
   const BookingCheckout = () => {
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);

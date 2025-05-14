@@ -55,7 +55,7 @@ const CheckoutForm = ({ onPaymentSuccess, venueId }) => {
 
         setPaymentStatus('succeeded');
         onPaymentSuccess?.(paymentIntent);
-        setTimeout(() => navigate('/venues'), 1500);
+        setTimeout(() => navigate('/my-Venues'), 1500);
       }
     } catch (err) {
       console.error('Payment Error:', err);

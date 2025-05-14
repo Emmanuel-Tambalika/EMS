@@ -22,9 +22,6 @@ const navLinks = [
  { path: "/profilePage", icon: MdPerson, label: "Profile" }
 ];
 
-
-
-
   const [bookedVenues, setBookedVenues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -240,15 +237,7 @@ const navLinks = [
                       Pay
                     </motion.button>
 
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleUnbook(venue._id)}
-                      className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-                    >
-                      <MdCancel className="text-lg" />
-                      Unbook
-                    </motion.button>
+                    
 
                     <motion.button
                       whileHover={{ scale: 1.05 }}

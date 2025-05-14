@@ -78,7 +78,7 @@ const CheckoutForm = ({ venueId }) => {
       }
 
         setPaymentStatus('succeeded');
-      setTimeout(() => navigate('/myVenues'), 1500);
+      setTimeout(() => navigate('/my-Venues'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Payment failed');
       setPaymentStatus('failed');

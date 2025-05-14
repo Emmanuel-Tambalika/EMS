@@ -37,7 +37,7 @@ app.use("/api/venues", venueRoutes);
 app.use("/api/bookings", bookingsRouter);  
 app.use("/api/payments", paymentsRouter);
 app.use("/api/notifications", notificationsRouter);
-app.use("api/emails",emailRouter);
+app.use("/api/emails",emailRouter);
  
 // Error Handling Middleware
 app.use((err, req, res, next) => {

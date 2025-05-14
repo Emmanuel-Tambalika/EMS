@@ -220,8 +220,8 @@ const MyBookings = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-10"
         >
-          <h2 className=" ml-36 text-3xl font-bold text-gray-800 mb-2">My Bookings</h2>
-          <p className="ml-46 text-gray-600">Manage your event bookings and payments</p>
+          <h2 className=" ml-100 text-3xl font-bold text-gray-800 mb-2">My Bookings</h2>
+          <p className=" ml-100  text-gray-600">Manage your event bookings and payments</p>
         </motion.div>
 
         {error && (
@@ -240,8 +240,8 @@ const MyBookings = () => {
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <p className="text-gray-500 text-lg">No bookings found</p>
-            <p className="text-gray-400 mt-2">Your upcoming events will appear here</p>
+            <p className=" ml-100 text-gray-500 text-lg">No bookings found</p>
+            <p className="ml-100 text-gray-400 mt-2">Your upcoming events will appear here</p>
           </motion.div>
         ) : (
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">

@@ -216,6 +216,15 @@ router.post("/:id/pay", verifyToken, async (req, res) => {
     booking.paymentDate = new Date();
     await booking.save();
 
+  // Update soldTickets count on event
+    const event = await Event.findById(booking.event._id);
+
+    if (!event.soldTickets) event.soldTickets = 0;
+    event.soldTickets += booking.ticketsCount;
+    await event.save();
+
+
+
     // Send confirmation email
    
     // 1. Send emails
@@ -238,24 +247,7 @@ router.post("/:id/pay", verifyToken, async (req, res) => {
         }
       );
 
-      // Organizer email
-      await sendEmail(
-        { email: booking.event.userOwner.email },
-        "newBookingAlert",
-        {
-          creator: booking.event.userOwner,
-          booking: {
-            event: {
-              name: booking.event.name,
-              date: booking.event.date
-            },
-            quantity: booking.ticketsCount,
-            price: booking.ticketAmount,
-            ticketType: booking.ticketDetails?.type || "General"
-          },
-          user: booking.user
-        }
-      );
+      
 
     
     } catch (emailError) {
@@ -271,12 +263,7 @@ router.post("/:id/pay", verifyToken, async (req, res) => {
         type: "payment" 
       });
 
-      // Organizer notification
-      await Email.create({
-        recipient: booking.event.userOwner,
-        message: `New booking for ${booking.event.name} by ${booking.user.name}`,
-        type: "booking"
-      });
+      
     } catch (notificationError) {
       console.error('Notification error:', notificationError);
     }
@@ -289,31 +276,33 @@ router.post("/:id/pay", verifyToken, async (req, res) => {
       error: "Payment confirmation failed",
       code: "PAYMENT_CONFIRMATION_ERROR" 
     });
-  }
-});
+  }   
+} );   
 
 
-// Get all email notifications for logged-in user
-router.get("/my", verifyToken, async (req, res) => {    
+// GET /emails/my - get all emails/notifications for logged-in user
+router.get("/emails/my", verifyToken, async (req, res) => {
   try {
-    const notifications = await Notification.find({
-      recipient: req.userId // From verifyToken middleware
-    }).sort({ createdAt: -1 });
+    const userId = req.userId;
 
-    const formatted = notifications.map(notif => ({
-      _id: notif._id,
-      subject: `Booking Notification - ${notif.type}`,
-      message: notif.message,
-      createdAt: notif.createdAt.toISOString()
+    // Find emails where recipient is the logged-in user
+    const emails = await Email.find({ recipient: userId })
+      .sort({ createdAt: -1 }); // newest first
+
+    // Format emails for frontend
+    const formattedEmails = emails.map(email => ({
+      id: email._id,
+      type: email.type,
+      message: email.message,
+      createdAt: email.createdAt.toISOString()
     }));
 
-    res.json(formatted);
+    res.status(200).json({ emails: formattedEmails });
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ error: "Failed to fetch notifications" });
+    console.error("Error fetching emails:", error);
+    res.status(500).json({ message: "Failed to fetch emails" });
   }
 });
-
 export default router;
 
 

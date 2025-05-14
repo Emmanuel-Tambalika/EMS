@@ -43,7 +43,11 @@ const eventSchema = new mongoose.Schema(
             required: true,
         },
 
-       
+        soldTickets:{
+            type:Number,
+        }
+           ,
+           
           isBooked: {
             type: Boolean,
             default: false,

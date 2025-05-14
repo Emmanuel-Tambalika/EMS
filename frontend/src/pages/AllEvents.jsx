@@ -13,6 +13,7 @@ const AllEvents = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+     const [soldTickets,setSoldTickets]=useState(0)
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -75,12 +76,12 @@ const AllEvents = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Calendar Section */}
-            <div className="mb-10 ml-20 space-y-6">
-                <div className="flex flex-col items-center mr-40 mt-40 mb-2 space-y-6">
+            <div className="mb-10  mt-1 space-y-6">
+                <div className="flex flex-col items-center mr-100 mt-30 mb-2 space-y-2">
                     <Calendar
                         onChange={handleDateChange}
                         value={selectedDate}
-                        className="border-none rounded-xl shadow-lg p-5 w-full bg-white"
+                       className="ml-70 shadow-lg rounded-lg"
                     />
                 </div>
                 
@@ -127,9 +128,13 @@ const AllEvents = () => {
                                             <span className="font-semibold min-w-[70px]">Venue:</span>
                                             <span>{event.venue}</span>
                                         </p>
-                                        <p className="flex items-start">
+                                            <p className="flex items-start">
                                             <span className="font-semibold min-w-[70px]">Tickets:</span>
                                             <span>{event.totalTickets} available</span>
+                                         </p>
+                                            <p className="flex items-start">
+                                            <span className="font-semibold min-w-[70px]">Tickets Sold :</span>
+                                            <span>{event.soldTickets}  </span>
                                         </p>
                                     </div>
 

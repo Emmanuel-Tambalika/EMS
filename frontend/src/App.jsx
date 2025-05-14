@@ -36,8 +36,10 @@ import Venue1 from './pages/venue1.jsx';
 import EmailNotificationList from './components/EmailNotificationList.jsx';
 import Mail from './pages/Mail.jsx';
 import EmailsSentToMe from './pages/EmailsSentToMe.jsx';
+import ManagerMail from './pages/ManagerMail.jsx';
 
 import Profile from './pages/Profile.jsx'
+import VenueProfile from './pages/VenueProfile.jsx';
 
 //Others Within To Create
 import CreateEvent from './pages/CreateEvent.jsx' 
@@ -46,9 +48,11 @@ import VenueModal from './pages/VenueModal.jsx';
 //Payments Mate !
 import CheckoutPage from './pages/CheckoutPage.jsx';
 import SucessCheckout from './pages/SucessCheckout.jsx';
+import ShowCalendar from './pages/ShowCalendar.jsx';
 
 //Tickets Payments . 
 import BookingCheckout from './pages/BookingCheckout.jsx';
+import SelectDateBooking from './components/SelectDateBooking.jsx';
 
 
 const App = () => {
@@ -81,6 +85,7 @@ const App = () => {
        <Route path='/check-out'  element={<CheckoutPage/>}/>
        <Route path='/Success-check-out'  element={<SucessCheckout/>}/>
        <Route path='/booking-checkout'element={<BookingCheckout/>}/>
+       <Route path='/booking-date'element={<SelectDateBooking/>}/>
 
        <Route path='/venues'element={<Venues/>}/>
        <Route path='/venues1'element={<Venue1/>}/> 
@@ -89,8 +94,12 @@ const App = () => {
        <Route path='/Create-Venue'  element={<VenueModal/>}/>
        <Route path='/my-Venues'  element={<MyVenues/>}/>
        <Route path='/profilePage'  element={<Profile/>}/>
+       <Route path='/Venueprofile'  element={<VenueProfile/>}/>
+
        <Route path='/MailPage'  element={<EmailNotificationList/>}/>
        <Route path='/emails'  element={<EmailsSentToMe/>}/>
+        <Route path='/Manager-emails'  element={<ManagerMail/>}/>
+         <Route path='/showCalendar'  element={<ShowCalendar/>}/>
  
        
 
