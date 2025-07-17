@@ -20,6 +20,7 @@ const LandingPage = () => {
 
         <li className='link-li'> <Link to='/emsFAQ'> FAQ</Link></li>
         <li className='link-li'> <Link to='/emsBlog'>Blog</Link></li>
+         <li className='link-li'><Link to='/events'> Events</Link></li>
         <li className='link-li'><Link to='/About-us'>AboutUs </Link></li>  
 
        </nav>

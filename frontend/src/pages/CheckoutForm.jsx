@@ -12,7 +12,7 @@ const CheckoutForm = ({ venueId }) => {
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [venue, setVenue] = useState(null);
 
-  useEffect(() => {
+     useEffect(() => {
     const fetchVenue = async () => {
       try {
         const response = await axios.get(

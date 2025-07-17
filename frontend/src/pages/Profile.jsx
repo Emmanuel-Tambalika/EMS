@@ -1,32 +1,42 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import { formatDate } from "../utils/date";
-import { MdLocationOn,MdHome,  MdMail, MdPerson } from 'react-icons/md';
+import { MdLocationOn, MdHome, MdMail, MdPerson } from 'react-icons/md';
 import react from '../assets/react.svg';
 
-
 const Profile = () => {
-
   const { user, logout } = useAuthStore();
-
-	const handleLogout = () => {
-		logout();
-	};
+  const navigate = useNavigate();
   const location = useLocation();
 
-
+  const handleLogout = () => {
+    logout();
+    navigate('/Log-In'); // Redirect to login after logout
+  };
 
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-           { path: "/EventsPage", icon: MdHome, label: "Home" },
-           { path: "/ALL-Venues", icon: MdLocationOn, label: " All Venues" },
-           { path: "/my-Venues", icon: MdLocationOn, label: " Booked Venues" },
-           { path: "/MailPage", icon: MdMail, label: "Mail" },
-           { path: "/profilePage", icon: MdPerson, label: "Profile" }
-         ];
+    { path: "/EventsPage", icon: MdHome, label: "Home" },
+    { path: "/ALL-Venues", icon: MdLocationOn, label: "All Venues" },
+    { path: "/my-Venues", icon: MdLocationOn, label: "Booked Venues" },
+    { path: "/MailPage", icon: MdMail, label: "Mail" },
+    { path: "/profilePage", icon: MdPerson, label: "Profile" }
+  ];
+
+  // If user is not logged in, redirect to login
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/Log-In');
+    }
+  }, [user, navigate]);
+
+  // If user is null (not logged in), show nothing (will redirect)
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -36,7 +46,6 @@ const Profile = () => {
           <img src={react} alt="Company Logo" className="w-8 h-8 mr-3" />
           <h1 className="text-xl font-bold text-blue-600">EMS</h1>
         </div>
-        
         <nav className="p-2">
           <ul className="space-y-1">
             {navLinks.map((link) => {

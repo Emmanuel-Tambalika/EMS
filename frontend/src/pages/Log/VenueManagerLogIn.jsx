@@ -31,7 +31,7 @@ const   VenueManagerLogIn= () => {
 
   return (
           <div className="verification-form"> 
-    <div className='form-div'>
+   
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ const   VenueManagerLogIn= () => {
           Welcome Back
         </h2>
 
-        <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-emerald-500 text-transparent bg-clip-text'>
+        <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-600 to-emerald-500 text-transparent bg-clip-text'>
           Venue Manager !
         </h2>
 
@@ -90,7 +90,7 @@ const   VenueManagerLogIn= () => {
       </div>
     </motion.div>
 
-    </div>
+   
     </div>
   );
 

@@ -21,7 +21,7 @@ import AttendeeLogIn from './pages/Log/AttendeeLogIn.jsx';
 import VenueManagerHome from './pages/VenueManagerHome.jsx';
 import AttendeeHome from './pages/AttendeeHome.jsx'
 
-
+import Event from './pages/Event.jsx';
 
 //Proctected Routes 
 import Events from './pages/Events.jsx';
@@ -39,6 +39,10 @@ import EmailsSentToMe from './pages/EmailsSentToMe.jsx';
 import ManagerMail from './pages/ManagerMail.jsx';
 
 import Profile from './pages/Profile.jsx'
+import AtteProfile from './pages/AtteProfile.jsx';
+import VeProfile from './pages/VeProfile.jsx';
+
+
 import VenueProfile from './pages/VenueProfile.jsx';
 
 //Others Within To Create
@@ -94,12 +98,15 @@ const App = () => {
        <Route path='/Create-Venue'  element={<VenueModal/>}/>
        <Route path='/my-Venues'  element={<MyVenues/>}/>
        <Route path='/profilePage'  element={<Profile/>}/>
-       <Route path='/Venueprofile'  element={<VenueProfile/>}/>
+       <Route path='/AtteProfile'  element={<AtteProfile/>}/>
+       <Route path='/Veprofile'  element={<VeProfile/>}/>
+
 
        <Route path='/MailPage'  element={<EmailNotificationList/>}/>
        <Route path='/emails'  element={<EmailsSentToMe/>}/>
         <Route path='/Manager-emails'  element={<ManagerMail/>}/>
          <Route path='/showCalendar'  element={<ShowCalendar/>}/>
+         <Route path='/events'  element={<Event/>}/>
  
        
 

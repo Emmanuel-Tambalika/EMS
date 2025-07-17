@@ -12,7 +12,7 @@ dotenv.config();
 
 // Email Configuration with App Password
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'gmail',   
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS // MUST be app password if 2FA enabled

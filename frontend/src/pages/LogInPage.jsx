@@ -29,20 +29,20 @@ const LogInPage = () => {
 		}
 	};
 
-	return (
+	 return (
           <div className="verification-form"> 
-		<div className='form-div'>
+	
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className='max-w-md w-full bg-gray-1700 bg-opacity-100 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+			className='max-w-md w-full bg-gray-1700 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
 		>
 			<div className='p-8'>
 				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-emerald-500 text-transparent bg-clip-text'>
 					Welcome Back  
 				</h2> 
-				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-emerald-500 text-transparent bg-clip-text'>
+				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-600 to-emerald-500 text-transparent bg-clip-text'>
 					 Event  Organizer !
 				</h2>
                 
@@ -89,7 +89,7 @@ const LogInPage = () => {
 			</div>
 		</motion.div>
 
-		</div>
+		
 		</div>
 	);
 

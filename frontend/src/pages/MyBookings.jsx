@@ -7,19 +7,14 @@ import { MdPayment, MdEmail, MdCancel  , MdBook, MdMail, MdPerson, MdHome } from
 import react from '../assets/react.svg';
 
 const MyBookings = () => {
-
   const location = useLocation();
-
   const isActive = (path) => location.pathname === path;
-
  const navLinks = [
       { path: "/AttendeePage", icon: MdHome, label: "Home" },
       { path: "/my-Bookings", icon: MdBook, label: "My Bookings" },
       { path: "/emails", icon: MdMail, label: "Mail" },
-      { path: "/profilePage", icon: MdPerson, label: "Profile" }
+      { path: "/AtteProfile", icon: MdPerson, label: "Profile" }
    ];  
-
-
 
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);

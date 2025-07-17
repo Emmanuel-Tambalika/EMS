@@ -1,11 +1,11 @@
-import express from "express";
+ import express from "express";
 import { Venue } from "../models/Venue.model.js";
 import { User } from "../models/User.model.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-   router.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { name, description, price, city, capacity } = req.body;
     if (!name || !description || !price || !city || !capacity) {
@@ -257,18 +257,5 @@ setInterval(async () => {
     console.error("Error processing expired bookings:", err);
   }
 }, 10000);
-
-
-
-// NEW ROUTE: Get all booked venues
-router.get('/booked', verifyToken, async (req, res) => {
-    try {
-        const venues = await Venue.find({ isBooked: true, venuePaidFor: true });
-        res.status(200).json(venues);
-    } catch (err) {
-        res.status(500).json({ message: "Internal server error", error: err.message });
-    }
-});
-
 
 export default router;

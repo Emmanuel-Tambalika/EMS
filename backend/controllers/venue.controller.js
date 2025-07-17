@@ -2,7 +2,7 @@ import {Venue } from "../models/Event.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
 
-export const signup3  = async (req, res) => {
+    export const signup3  = async (req, res) => {
 	const { name, description,  price , capacity ,totalTickets} = req.body;
 
 

@@ -1,6 +1,6 @@
 
 import express from "express";
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; 
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -60,7 +60,7 @@ app.use((req, res) => {
 const __dirname = path.resolve();
 mongoose.connect('mongodb://localhost:27017/EMS_db');
 const db = mongoose.connection;
-
+ 
 db.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
@@ -68,8 +68,8 @@ db.on('error', (err) => {
 db.once('open', () => {
   console.log('Connected to MongoDB');   
 });
-
-// Production Configuration
+  
+// Production Configuration   
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
   app.get("*", (req, res) => {

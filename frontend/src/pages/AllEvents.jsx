@@ -13,13 +13,13 @@ const AllEvents = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-     const [soldTickets,setSoldTickets]=useState(0)
+    const [soldTickets, setSoldTickets] = useState(0)
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [expandedDescriptions, setExpandedDescriptions] = useState({});
     const { user } = useAuthStore();
- 
+
     const formatDateToLocalISO = (date) => {
         if (!date) return null;
         const offset = date.getTimezoneOffset() * 60000;
@@ -70,9 +70,9 @@ const AllEvents = () => {
 
     useEffect(() => {
         fetchEvents(new Date());
-        
+
     }, []);
-   
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Calendar Section */}
@@ -81,10 +81,10 @@ const AllEvents = () => {
                     <Calendar
                         onChange={handleDateChange}
                         value={selectedDate}
-                       className="ml-70 shadow-lg rounded-lg"
+                        className="ml-70 shadow-lg rounded-lg"
                     />
                 </div>
-                
+
                 <div className="text-center">
                     <Link to='/create-Events' className="inline-flex flex-col items-center group">
                         <MdOutlineAddBox className="text-5xl mt-2 mr-100 text-blue-600 group-hover:text-blue-800 transition-all group-hover:scale-110" />
@@ -102,7 +102,7 @@ const AllEvents = () => {
                         <p className="text-lg text-blue-600">Loading events...</p>
                     </div>
                 )}
-       
+
                 {error && (
                     <div className="text-center py-8 bg-red-50 rounded-xl mb-6">
                         <p className="text-lg text-red-600">{error}</p>
@@ -113,12 +113,12 @@ const AllEvents = () => {
                     {!loading && !error && (
                         events.length > 0 ? (
                             events.map(event => (
-                                <div 
-                                    key={event._id} 
+                                <div
+                                    key={event._id}
                                     className="border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all bg-white"
                                 >
                                     <h3 className="text-xl font-bold text-gray-900 mb-4">{event.name}</h3>
-                                    
+
                                     <div className="space-y-2 mb-4">
                                         <p className="flex items-start">
                                             <span className="font-semibold min-w-[70px]">Date:</span>
@@ -128,11 +128,11 @@ const AllEvents = () => {
                                             <span className="font-semibold min-w-[70px]">Venue:</span>
                                             <span>{event.venue}</span>
                                         </p>
-                                            <p className="flex items-start">
+                                        <p className="flex items-start">
                                             <span className="font-semibold min-w-[70px]">Tickets:</span>
                                             <span>{event.totalTickets} available</span>
-                                         </p>
-                                            <p className="flex items-start">
+                                        </p>
+                                        <p className="flex items-start">
                                             <span className="font-semibold min-w-[70px]">Tickets Sold :</span>
                                             <span>{event.soldTickets}  </span>
                                         </p>
@@ -150,18 +150,17 @@ const AllEvents = () => {
                                         </span>
                                     </div>
 
-                                    <div 
-                                        className={`text-gray-600 mb-3 transition-all duration-300 ${
-                                            expandedDescriptions[event._id] 
-                                                ? 'max-h-screen' 
+                                    <div
+                                        className={`text-gray-600 mb-3 transition-all duration-300 ${expandedDescriptions[event._id]
+                                                ? 'max-h-screen'
                                                 : 'max-h-20 overflow-hidden'
-                                        }`}
+                                            }`}
                                     >
-                                    <p className='text-green-500 lg-50'> Description and Take Aways : </p>  {event.description}
+                                        <p className='text-green-500 lg-50'> Description and Take Aways : </p>  {event.description}
                                     </div>
-                                    
+
                                     {event.description.length > 100 && (
-                                        <button 
+                                        <button
                                             className="text-blue-600 hover:text-blue-800 font-medium text-sm mb-4"
                                             onClick={() => toggleDescription(event._id)}
                                         >
@@ -213,7 +212,7 @@ const AllEvents = () => {
                 event={selectedEvent}
                 onDeleteSuccess={handleDeleteSuccess}
             />
-        </div>  
+        </div>
     );
 };
 

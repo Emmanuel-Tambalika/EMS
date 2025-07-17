@@ -3,7 +3,6 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { MdClose } from 'react-icons/md';
 import axios from 'axios';
-
 // Helper: format a Date object to 'YYYY-MM-DD' (local time)
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -11,20 +10,17 @@ const formatDate = (date) => {
   const day = `${date.getDate()}`.padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-
 // Helper: parse ISO string or date string to local 'YYYY-MM-DD'
 const normalizeDateString = (dateStr) => {
   // Create Date object and format to local date string
   const date = new Date(dateStr);
   return formatDate(date);
 };
-
 const VenueCalendar = ({ isOpen, onClose, venue, onBookingSuccess }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [bookedDates, setBookedDates] = useState([]); // array of 'YYYY-MM-DD' strings
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
   // Normalize booked dates on venue change
   useEffect(() => {
     if (venue) {
@@ -34,31 +30,25 @@ const VenueCalendar = ({ isOpen, onClose, venue, onBookingSuccess }) => {
       setError(null);
     }
   }, [venue]);
-
   if (!isOpen) return null;
-
   // Check if date is before today (local)
   const isPastDate = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return date < today;
   };
-
   // Check if date is booked
   const isBookedDate = (date) => {
     const dateStr = formatDate(date);
     return bookedDates.includes(dateStr);
   };
-
   // Calendar tile class based on date status
   const tileClassName = ({ date, view }) => {
     if (view !== 'month') return '';
-
     if (isBookedDate(date)) return 'calendar-day-booked';
     if (isPastDate(date)) return 'calendar-day-past';
     return 'calendar-day-available';
   };
-
   // Disable past and booked dates
   const tileDisabled = ({ date, view }) => {
     if (view !== 'month') return false;

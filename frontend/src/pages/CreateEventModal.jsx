@@ -1,11 +1,10 @@
  
-  import React, { useState } from 'react';
-  import { motion } from "framer-motion";
-  import axios from 'axios'; 
+import React, { useState } from 'react';
+import { motion } from "framer-motion";
+import axios from 'axios'; 
 import { Link, useNavigate ,useSearchParams } from "react-router-dom";
 import {SnackbarProvider, useSnackbar} from 'notistack';
 import BackButton from "../components/BackButton.jsx";
-
 import '../eMailVerification.css';
 
  

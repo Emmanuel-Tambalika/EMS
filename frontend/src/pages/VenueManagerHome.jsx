@@ -7,42 +7,34 @@ import VenueManage from '../components/VenueManage.jsx'; // Import new modal
 import '../App.css';
 import react from '../assets/react.svg';
 
-const VenueManagerHome = () => {
+  const VenueManagerHome = () => {
   const location = useLocation();
-
   const isActive = (path) => location.pathname === path;
-
   const navLinks = [   
     { path: "/VenueManager", icon: MdHome, label: "Home" },
     { path: "/Manager-emails", icon: MdMail, label: "Mail" },
-    { path: "/Venueprofile", icon: MdPerson, label: "Profile" }
-  ];
-
+    { path: "/Veprofile", icon: MdPerson, label: "  Profile" }
+];
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isManageModalOpen, setIsManageModalOpen] = useState(false); // New modal state
-
   const [selectedVenue, setSelectedVenue] = useState(null);
-
+  
   const fetchVenues = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch("http://localhost:5001/api/venues", {
         method: "GET",
         credentials: "include"
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const data = await response.json();
       setVenues(data);
     } catch (err) {
@@ -61,7 +53,7 @@ const VenueManagerHome = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const handleUpdateSuccess = () => {
+   const handleUpdateSuccess = () => {
     fetchVenues();
     setIsEditModalOpen(false);
   };

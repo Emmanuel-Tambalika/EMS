@@ -25,7 +25,7 @@ const EmailsSentToMe = () => {
     { path: '/AttendeePage', icon: MdHome, label: 'Home' },
     { path: '/my-Bookings', icon: MdBook, label: 'My Bookings' },
     { path: '/emails', icon: MdMail, label: 'Mail' },
-    { path: '/profilePage', icon: MdPerson, label: 'Profile' },
+    { path: '/AtteProfile', icon: MdPerson, label: 'Profile' },
   ];
 
   const fetchEmails = async () => {

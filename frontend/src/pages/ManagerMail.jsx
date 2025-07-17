@@ -16,7 +16,7 @@ const ManagerMail = () => {
   const navLinks = [
     { path: "/VenueManager", icon: MdHome, label: "Home" },
      { path: "/Manager-emails", icon: MdMail, label: "Mail" },
-    { path: "/Venueprofile", icon: MdPerson, label: "Profile" }
+    { path: "/Veprofile", icon: MdPerson, label: "Profile" }
   ];
 
   const fetchEmails = async () => {

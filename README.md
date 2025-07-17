@@ -9,7 +9,7 @@ cd frontend
 type in  ->   npm i
   
 //Add More Packages .
-npm i react-router-dom axios react-cookie notistack react-icons recoil date-fns framer-motion zustand socket.io-client react-hot-toast
+npm i react-router-dom axios react-cookie notistack react-icons recoil date-fns framer-motion zustand socket.io-client react-hot-toast lucide-react
 
 Folder Setup 
 
