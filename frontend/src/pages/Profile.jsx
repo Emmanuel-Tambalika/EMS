@@ -137,7 +137,7 @@ const Profile = () => {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+        </div>
   )
 }
 
